@@ -20,8 +20,8 @@ git clone
 git add .
 ```
 -first
-       -first first
-       -first second
+ -first first
+ -first second
 
  ## TO do list
  - [ ] Github1
