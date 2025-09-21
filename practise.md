@@ -19,4 +19,4 @@ This is my [repository](https://github.com/itsneeleshsingh/pwn.college_neelesh)
 git clone
 git add .
 ```
-you can look for [this](heading-1)
+you can look for [this](#heading-1)
