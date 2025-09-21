@@ -19,9 +19,9 @@ This is my [repository](https://github.com/itsneeleshsingh/pwn.college_neelesh)
 git clone
 git add .
 ```
--first
- -first first
- -first second
+- first
+ - first first
+ - first second
 
  ## TO do list
  - [ ] Github1
