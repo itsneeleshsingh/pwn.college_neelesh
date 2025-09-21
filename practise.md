@@ -20,12 +20,12 @@ git clone
 git add .
 ```
 -first
- -first first
- -first second
+       -first first
+       -first second
 
- ##TO do list
- - [ ]Github1
- - [X]Github2
+ ## TO do list
+ - [ ] Github1
+ - [X] Github2
 :+1:
 
 footnote[^1]
