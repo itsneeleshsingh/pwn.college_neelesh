@@ -7,7 +7,7 @@ x<sub>2</sub> + x<sup>1</sup>
 <ins>Important heading</ins>
 > Is this a quote? <ins>may be</ins>
 you can use `git add .`
-> ## This is subheading 2
+ ## This is subheading 2
 and also : 
 ```
 git clone
