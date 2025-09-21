@@ -22,5 +22,5 @@ git add .
 you can look for [this](#heading-1)
 # SPACES
 hello this\
-is a try message<br/>
+is a try message<br>
 hello
