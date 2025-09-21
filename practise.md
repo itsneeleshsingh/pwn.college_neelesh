@@ -11,4 +11,4 @@ and also :
 git clone
 git add .
 ```
-This is my [repository]([url](https://github.com/itsneeleshsingh/pwn.college_neelesh)
+This is my [repository](https://github.com/itsneeleshsingh/pwn.college_neelesh)
