@@ -11,3 +11,4 @@ and also :
 git clone
 git add .
 ```
+you can use this color - `#000000`
