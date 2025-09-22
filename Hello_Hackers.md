@@ -65,7 +65,7 @@ neel@NeelTech:~/pwn.college_neelesh$ ssh -i ./key hacker@dojo.pwn.college
 Warning: Identity file ./key not accessible: No such file or directory.
 hacker@dojo.pwn.college: Permission denied (publickey).
 ```
-Thus I corrected it by coming out of that directory and executing the same command again...
+Thus I corrected it by coming out of that directory where my private key was stored and executing the same command again...
 ```bash
 neel@NeelTech:~/pwn.college_neelesh$ cd ..
 neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
