@@ -3,7 +3,7 @@ This module contains three challenges that includes Intro to Commands, Intro to 
 
 # Intro to Commands
 The challenge asks to invoke the `hello` command to retrieve the module flag. 
-Since the Linux commands are case sensitive, thus we should run exactly the same way in the shell to get the flag.
+Since the Linux commands are case sensitive, thus we should run exactly the same way in the shell to get the flag. On sumbitting the flag, challenge is completed.
 
 ## My solution
 **Flag:** `pwn.college{g4yaXFF365j7pf6W0H9hOWxGD9r.QX3YjM1wCO2kjNzEzW}`
@@ -40,7 +40,7 @@ Since the Linux commands are case sensitive, thus we should run exactly the same
 
 # Intro to Arguments
 The challenge asks to run the `hello` command but this time with an argument that is `hackers`.
-Instead of just typing `hello` that is a single command, we have to write command + argument that is `hello hackers`.
+Instead of just typing `hello` that is a single command, we have to write command + argument that is `hello hackers`. The flag is printed as output and on sumbitting the flag, challenge is completed.
 
 ## My solution
 **Flag:** `pwn.college{g4CgO5T_DvafOLCxxGOVG1UkQ4H.QX4YjM1wCO2kjNzEzW}`
@@ -89,3 +89,51 @@ Connected!
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/hello/) - Hello Hackers / Intro to Arguments module pages
 - Just went through a part of [Linux arguments](https://www.w3resource.com/linux-system-administration/commands-and-arguments.php) - Got to know how arguments are taken and whitespaces are removed during execution.
+
+
+# Command History
+In this challenge the flag is already injected into the command history. We have to open terminal, start the challenge and press **up arrow key** to get our flag that was hidden in the command history. On sumbitting the flag, challenge is completed.
+
+# My solution
+**Flag:** `pwn.college{8k7upmHFAQoo26NWzGeBSOtUZDd.0lNzEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+    ```bash
+    neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
+    Connected!
+    ```
+2. Now the shell is connected to dojo. Inside the shell, I pressed the up arrow key. The shell displayed the prevously saved command that contained the flag.
+    ```bash
+    hacker@hello~command-history:~$ the flag is pwn.college{8k7upmHFAQoo26NWzGeBSOtUZDd.0lNzEzNxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/hello/) to complete the challenge.
+
+The challenge shows how shell keeps a record of the commands that we enter in the command line.
+
+- I found that these history commands are stored in local directory with type - BASH_HISTORY FILE with .bash_history extension.
+    ```bash
+    neel@NeelTech:~$ cat .bash_history
+    ```
+    This displayed the entire command history since I installed Ubuntu on the machine.
+
+## What I learned
+1. Concept of Command history
+    - The shell stores all the executed commands in the history buffer.
+    - This makes repetitive or earlier executed commands to run without typing them from scratch.
+2. Navigation through history
+    - Pressing Up arrow key retrieves previous commands
+    - Pressing Down arrow key to scroll back to the recent commands.
+3. Practical advantages and Security
+    - Saves time for a hacker by avoiding repetitive typing.
+    - Useful for recalling long commands that was previously executed.
+    - Sensitive data typed in commands can also be stored and sometimes flags or creedenetials may be hidden inside history.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/hello/) - Hello Hackers / Command History module pages
+- Read little bit about the `history` command from [linux history command](https://phoenixnap.com/kb/linux-history-command)
+    ```bash
+    neel@NeelTech:~/pwn.college_neelesh$ history
+    ```
+    ```bash
+    neel@NeelTech:~/pwn.college_neelesh$ history | grep "su"
+    ```
