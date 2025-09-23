@@ -78,5 +78,9 @@ Thus If we go inside the challenge directory and execute the `run` program, it w
 1. Programs are often stored inside specific directories like `/bin`, `/usr/bin`, or `/challenge` in this challenge. 
 
 2. Absolute vs Relative execution  
-   - In Absolute path: `/challenge/run` always works no matter where you are in the filesystem.  
+   - In Absolute path: `/challenge/run` always works no matter where we are in the filesystem.  
    - In Relative path: If I were already inside `/challenge`, I could have run it as `./run`. But this challenge doesn't accept that.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths / Program and absolute paths module pages
+
