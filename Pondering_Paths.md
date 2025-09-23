@@ -186,3 +186,55 @@ Here `/challenge/run` is an absolute path as it is invoked from the right direct
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths / Position elsewhere module pages.
+
+
+# Position yet elsewhere
+This challenge introduced the `cd` command in linux. In this challenge we have to navigate to a specific directory which it will tell after some commands. Then after changing the directory we can run the `/challenge/run` to execute the program.
+
+## My solution
+
+**Flag:** `pwn.college{YAZ-ZsgNs_Kr_wd4NUiHTfPKdEv.QX4QTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+    ```bash
+    neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
+    Connected!
+    ```
+2. Now the shell is connected to dojo. Now execute any command or try to run `/challenge/run`.
+    ```bash
+    hacker@paths~position-yet-elsewhere:~$ /challenge/run
+    Incorrect...
+    You are not currently in the /usr/include directory.
+    Please use the `cd` utility to change directory appropriately.
+    ```
+3. It shows the correct path. Thus change the directory using the `cd` command followed by the correct path as an argument.
+    ```bash
+    hacker@paths~position-yet-elsewhere:~$ cd /usr/include
+    ```
+4. Now execute the `/challenge/run` command to run the program.
+    ```bash
+    hacker@paths~position-yet-elsewhere:/usr/include$ /challenge/run
+    Correct!!!
+    /challenge/run is an absolute path, invoked from the right directory!
+    Here is your flag:
+    pwn.college{YAZ-ZsgNs_Kr_wd4NUiHTfPKdEv.QX4QTN0wCO2kjNzEzW}
+    ```
+5. The flag appeared on the screen, which I then copied and submitted on [pwn.college](https://pwn.college/linux-luminarium/paths/) to complete the challenge.
+
+Here `/challenge/run` is an absolute path as it is invoked from the right directory.
+<br>
+I was wondering about what are the similarities and differences in Position Thy self, Position elsewhere and Position yet elsewhere. I could not found any differences except the variations in the location paths. Will try to look after some time.
+
+## What I learned
+
+1. Role of the current working directory
+    - The shell prompt always shows where the shell is currently located.
+    - Current working directory can be changed with commands like `cd`, which affects how relative paths are interpreted.
+
+2. Interaction with challenge programs
+    - Some programs need to be executed from specific directories like here from `/tmp`.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths / Position elsewhere module pages.
+
+
