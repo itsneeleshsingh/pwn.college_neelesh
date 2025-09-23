@@ -173,8 +173,6 @@ This challenge introduced the `cd` command in linux. In this challenge we have t
     ```
 5. The flag appeared on the screen, which I then copied and submitted on [pwn.college](https://pwn.college/linux-luminarium/paths/) to complete the challenge.
 
-Here `/challenge/run` is an absolute path as it is invoked from the right directory.
-
 ## What I learned
 
 1. Using the cd command
@@ -238,3 +236,52 @@ I was wondering about what are the similarities and differences in Position Thy 
 - [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths / Position elsewhere module pages.
 
 
+# Implicit relative paths, from /
+In this challenge we have to use relative path instead of absolute path as in previous challenges. The task is to run the program `/challenge/run` but using a relative path while staying in the root directory `/`. Since challenge folder is directly under the root, the relative path would be `challenge/run`.
+
+## My solution
+
+**Flag:** `pwn.college{8D52wvZWPCwNcLrjYRIoPIc9DZ9.QX5QTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+    ```bash
+    neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
+    Connected!
+    ```
+2. Now the shell is connected to dojo. Now execute the `challenge/run` command because to access challenge directory which is under root itself. Hence we can use without specifiying `/` which is used for absolute paths.
+    ```bash
+    hacker@paths~implicit-relative-paths-from-:/$ challenge/run
+    Correct!!!
+    challenge/run is a relative path, invoked from the right directory!
+    Here is your flag:
+    pwn.college{8D52wvZWPCwNcLrjYRIoPIc9DZ9.QX5QTN0wCO2kjNzEzW}
+    ```
+
+3. The flag appeared on the screen, which I then copied and submitted on [pwn.college](https://pwn.college/linux-luminarium/paths/) to complete the challenge.
+
+The challenge tests how relative paths change depending on cwd(current working directory).
+
+- According to me - The hint provided : "your relative path starts with the letter c" confirmed that the path was `challenge/run`
+
+- I also tried to execute `ls` command and i found the challenge directory which confirms the hint.
+    ```bash
+    hacker@paths~implicit-relative-paths-from-:/$ ls
+    bin   challenge  etc   home  lib32  libx32  mnt  opt   root  sbin  sys  usr
+    boot  dev        flag  lib   lib64  media   nix  proc  run   srv   tmp  var
+    ```
+
+## What I learned
+
+1. Relative paths are depend on the current working directory
+    - From `/` the relative path to the program is `challenge/run`.
+    - From `/challenge` the relative path would be `run`.
+
+2. Special notations in paths
+    - `.` refers to the current directory.
+    - `..` refers to the parent directory.
+
+3. cwd is the directory that your prompt is currently located at and relative path is interpreted relative to your cwd.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths / Implicit relative paths, from / module pages.
+- Got to know difference between `cwd` and `pwd` from a [QNA website](https://unix.stackexchange.com/questions/709896/what-is-the-difference-between-cwd-and-pwd). `pwd` prints the current working directory (a command) while `cwd` is like a concept that shows the current working directory.
