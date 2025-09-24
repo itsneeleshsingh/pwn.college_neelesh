@@ -337,3 +337,50 @@ hacker@paths~explicit-relative-paths-from-:/$ ./challenge/././run
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths /  Explicit relative paths, from / module pages.
+
+
+# Implicit relative path
+This level highlights an important Linux security feature: the current directory `.` is not automatically searched when running commands.  
+That means if we are in `/challenge` and simply type `run`, Linux will not execute `./run`. In this challenge we have to go inside `challenge` directory and then execute the `run` command explicilty from that cwd.
+
+## My solution
+
+**Flag:** `pwn.college{QGREmlu87s3CqdFk9mw65Sf3HjY.QXxUTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+    ```bash
+    neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
+    Connected!
+    ```
+2. Now the shell is connected to dojo. Change into the `/challenge` directory
+    ```bash
+    hacker@paths~implicit-relative-path:~$ cd /challenge
+    hacker@paths~implicit-relative-path:/challenge$
+    ```
+3. If we try to directly run the command it will show error.
+    ```bash
+    hacker@paths~implicit-relative-path:/challenge$ run
+    bash: run: command not found
+    ```
+4. Run explicitly using `./` to reference the current directory
+    ```bash
+    hacker@paths~implicit-relative-path:/challenge$ ./run
+    Correct!!!
+    ./run is a relative path, invoked from the right directory!
+    Here is your flag:
+    pwn.college{QGREmlu87s3CqdFk9mw65Sf3HjY.QXxUTN0wCO2kjNzEzW}
+    ```
+5. The flag appeared on the screen, which I then copied and submitted on [pwn.college](https://pwn.college/linux-luminarium/paths/) to complete the challenge.
+
+This is intentional: if Linux always searched the current directory, attackers could trick users into running malicious programs named like system utilities (e.g., a fake `ls` in a download folder).  
+Therefore to run a file in the current directory, you must explicitly tell the shell with `./`.
+
+## What I learned
+1. Linux does not auto-execute from cwd.
+2. Security: This prevents accidental execution of malicious programs placed in user directories.
+3. Always run local executables with `./`
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths /  Implicit relative path module pages.
+
+
