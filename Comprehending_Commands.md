@@ -195,3 +195,50 @@ grep: /challenge/: Is a directory
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Listing files module pages   
+
+
+# Touching files
+This challenge teaches how to create empty files with the `touch` command. `touch` is a command to create empty file with the name passed on argument.
+In this challenge we have to create two files `/tmp/pwn` and `/tmp/college` and then execute the `challenge/run` program to get the flag.
+
+## My solution
+**Flag:** `pwn.college{s7rtLMruOyesMLOR6WEQBXE5jJM.QXwMDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we have to create the two required files with `touch`.
+    ```bash
+    hacker@commands~touching-files:~$ touch /tmp/pwn
+    hacker@commands~touching-files:~$ touch /tmp/college
+    ```
+3. We can verify it by using `ls` command.
+    ```bash
+    hacker@commands~touching-files:~$ ls /tmp
+    bin  college  hsperfdata_root  pwn  tmp.TpSOPGOVKK
+    ```
+4. Now execute the run command.
+    ```bash
+    hacker@commands~touching-files:~$ /challenge/run
+    Success! Here is your flag:
+    pwn.college{s7rtLMruOyesMLOR6WEQBXE5jJM.QXwMDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+We can also do the same challenge by going into `/tmp` first then using the `touch` command where then we have to just provide the file name as now they are relative to the cwd.
+```bash
+hacker@commands~touching-files:~$ cd /tmp
+hacker@commands~touching-files:/tmp$ touch pwn
+hacker@commands~touching-files:/tmp$ touch college
+```
+
+## What I learned
+1. touch filename creates an empty file if filename does not exist otherwise it updates the files modification timestamps.(found other usecase from net)
+2. We can give absolute as well as relative paths in `touch` command.
+3. It creates a empty file - I used the `cat` command to see it whether its true or not.
+    ```bash
+    hacker@commands~touching-files:/tmp$ cat pwn
+    hacker@commands~touching-files:/tmp$
+    ```
+    Since no output was there, it means that it created an empty file.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Touching files module pages   
