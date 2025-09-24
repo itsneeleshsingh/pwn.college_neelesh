@@ -559,3 +559,46 @@ In this challenge, the flag file is named `flag` and hidden somewhere on the fil
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Finding files module pages  
 
 
+# Linking files
+This challenge teaches symbolic links (symlinks).
+A symbolic link is a special file that contains a path to some other file.
+In this challenge:
+- `/flag` contains the real flag.  
+- `/challenge/catflag` reads `/home/hacker/not-the-flag`.  
+- We have to change `/home/hacker/not-the-flag` so it points to `/flag` using a symlink, then run `/challenge/catflag` that will follow the symlink and print the real flag.
+
+## My solution
+**Flag:** `pwn.college{cfU5nmfZ68USzd57Anhli4JbTlz.QX5ETN1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now Create a symlink named `/home/hacker/not-the-flag` that points to `/flag` using `ls -s`.
+    ```bash
+    hacker@commands~linking-files:~$ ln -s /flag /home/hacker/not-the-flag
+    hacker@commands~linking-files:~$
+    ```
+3. Now check whether link is formed using `file` command as given in challenge question.
+    ```bash
+    hacker@commands~linking-files:~$ file not-the-flag
+    not-the-flag: symbolic link to /flag
+    ```
+4. Now we can run our program, which will go to `/home/hacker/not-the-flag` which directs it to `/flag`.
+    ```bash
+    hacker@commands~linking-files:~$ /challenge/catflag
+    About to read out the /home/hacker/not-the-flag file!
+    pwn.college{cfU5nmfZ68USzd57Anhli4JbTlz.QX5ETN1wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+**My mistake:** I by mistake wrote `/challenge/catflag` in the symbolic linking command.
+```bash
+hacker@commands~linking-files:~$ ln -s /flag /challenge/catflag
+ln: failed to create symbolic link '/challenge/catflag': File exists
+```
+## What I learned
+1. How to create symbolic links: ln -s `target` and `linkname`
+2. Concept of Hard link vs Soft Link. (as in the dojo module pages)
+3. `file` command which tells which type of file it is.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands /Linking files module pages  
+- To understand hard/soft link better, i used [Hard vs Soft Links in Linux](https://www.youtube.com/watch?v=4-vye3QFTFo)
