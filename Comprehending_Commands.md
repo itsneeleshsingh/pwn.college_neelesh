@@ -110,3 +110,28 @@ cat: flag: No such file or directory
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / More catting practice module pages
 
 
+# Grepping for a needle in a haystack
+In this challenge we have to use `grep` function. `grep` scans files line by line for text matching the given string or set of words and prints matching lines.
+
+## My solution
+**Flag:** `pwn.college{kpN-701uCggM27tZB3obSPoBO6A.QX3EDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So we will write `pwn.college` which is argument to search for in the file `/challenge/data.txt` as 2nd argument to the `grep` command.
+    ```bash
+    hacker@commands~grepping-for-a-needle-in-a-haystack:~$ grep pwn.college /challenge/data.txt
+    pwn.college{kpN-701uCggM27tZB3obSPoBO6A.QX3EDO0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+Here flag was not printed or stored in a single file. There was a filee with hundreds thousands of lines. So grep allowed to search the flag using string matching.
+
+## What I learned
+1. `grep` basics — how to find lines that contain a search string in large files.
+2. Got to know about its implementation - where we have to search some parrticular piece of text from a bunch of lines and texts.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Grepping for a needle in a haystack module pages   
+- Just learned some 2-3 more arguments from [grep command](https://www.geeksforgeeks.org/linux-unix/grep-command-in-unixlinux/) like `grep -c` to count the number of lines it matches with the given string.
+
+
