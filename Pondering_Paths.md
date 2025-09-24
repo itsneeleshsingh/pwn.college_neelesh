@@ -384,3 +384,43 @@ Therefore to run a file in the current directory, you must explicitly tell the s
 - [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths /  Implicit relative path module pages.
 
 
+# Home sweet home
+This challenge get to know us about the home directory and the special `~` shorthand that Bash expands to our home directory here `home/hacker`. In this challenge, it requires `/challenge/run` to write a copy of the flag to a file we specify. Rules are - 
+1. The argument we pass must be an absolute path.
+2. The path must be inside our home directory.  
+3. Before expansion, the argument string we write must be three characters or less.
+
+## My solution
+
+**Flag:** `pwn.college{41nMOcPLavth9_bGXp7_fRr_8KW.QXzMDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+    ```bash
+    neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
+    Connected!
+    ```
+2. Now the shell is connected to dojo. Choose a short path that meets the "three characters or less before expansion" rule. For example `~/t`. Run `/challenge/run` and pass `~/t` as the argument.
+    ```bash
+    hacker@paths~home-sweet-home:~$ /challenge/run ~/t
+    Writing the file to /home/hacker/t!
+    ... and reading it back to you:
+    pwn.college{41nMOcPLavth9_bGXp7_fRr_8KW.QXzMDO0wCO2kjNzEzW}
+    ```
+3. The flag appeared on the screen, which I then copied and submitted on [pwn.college](https://pwn.college/linux-luminarium/paths/) to complete the challenge.
+
+**My Mistake**: I first wrote absolute path greater than 3 characters.
+```bash
+hacker@paths~home-sweet-home:~$ /challenge/run ~/te
+The argument you provided must not have been longer than 3 characters (it's
+currently 4 characters long)!
+```
+`~/t` is acceptable here because the shell expands `~` to `/home/hacker`, producing an absolute path `/home/hacker/t`
+
+# What I learned
+1. expansion: `~` expands to our home directory `/home/hacker`, and the expansion results in an absolute path.
+2. Shell does expansion before program sees the argument.
+3. Always check the destination file if it already contain important data to avoid accidental overwrite.
+4. The shell session will start with our home directory as our current cwd.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths /  Home sweet home module pages.
