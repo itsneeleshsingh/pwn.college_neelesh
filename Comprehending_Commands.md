@@ -190,7 +190,7 @@ grep: /challenge/: Is a directory
 ```
 ## What I learned
 1. `ls` is the primary discovery tool for finding files and directories that lists out the files and folders.
-2. I noticed that only directories were showing. Thus after some research i got to know that we can use `ls --all` to get all the files and folers with hidden files starting with `.` dot.
+2. I noticed that only normal files and folders were showing. Thus after some research i got to know that we can use `ls --all` to get all the files and folers with hidden files starting with `.` dot.
 3. If we only write `ls` - It shows the files and folders of the cwd while we can provide any relative or absolute path in it.
 
 ## References 
@@ -242,3 +242,73 @@ hacker@commands~touching-files:/tmp$ touch college
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Touching files module pages   
+
+
+# Removing files
+This challenge teaches the `rm` command and how to remove files from the filesystem.  
+The challenge will create a `delete_me` file in our home directory and we have to remove it and then run `/challenge/check`, which verifies the deletion and returns the flag.
+
+## My solution
+**Flag:** `pwn.college{cSEYcq_Y38FaAPqClEkp7lK-80M.QX2kDM1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Then i check the file using `ls` command.
+    ```bash
+    hacker@commands~removing-files:~$ ls
+    Desktop  delete_me  t
+    ```
+3. So the file `delete_me` is present which we have to remove using `rm` command followed by file name as argument. To verify we can again look into the files and folders using `ls` command.
+    ```bash
+    hacker@commands~removing-files:~$ rm delete_me
+    hacker@commands~removing-files:~$ ls
+    Desktop  t
+    ```
+4. Now we can execute our program to check and get the flag.
+    ```bash
+    hacker@commands~removing-files:~$ /challenge/check
+    Excellent removal. Here is your reward:
+    pwn.college{cSEYcq_Y38FaAPqClEkp7lK-80M.QX2kDM1wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+We do not have to go into any directory as in the challenge, it was mentioned that the file is there in the home directory.
+
+## What I learned
+1. How to remove files using `rm`.
+2. Always verify with ls before and after removal.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Removing files module pages   
+
+
+# Moving files
+This challenge teaches the `mv` command how to move/rename files.
+`mv` moves a file from one path to another (or renames it - in the example of dojo).
+
+## My solution
+**Flag:** `pwn.college{QSR_SQbUQ0_1cEPUGbEwDLEM9OS.0VOxEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Since we have to move the `/flag` to `/tmp/hack-the-planet`, Thus we will use the `mv` command and will provide both the path as arguments.
+    ```bash
+    hacker@commands~moving-files:~$ mv /flag /tmp/hack-the-planet
+    Correct! Performing 'mv /flag /tmp/hack-the-planet'.
+    ```
+3. Now run the check program normally.
+    ```bash
+    hacker@commands~moving-files:~$ /challenge/check
+    Congrats! You successfully moved the flag to /tmp/hack-the-planet! Here it is:
+    pwn.college{QSR_SQbUQ0_1cEPUGbEwDLEM9OS.0VOxEzNxwCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+Note that the flag is not in our home directory, Its under the `/` root directory.
+
+## What I learned
+1. `mv` can be used to rename or relocate files. It does not copy by default source will no longer exist at the old location after a successful move.
+2. From a location file is copied and we can specify another location which can also be inside some other directories.
+3. To reename a file we can use `mv` command itself.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Moving files module pages   
+- Read liitle more from [mv command](https://www.geeksforgeeks.org/linux-unix/mv-command-linux-examples/) and got to know that we can move multiple files at once by just specifying files as arguments and at last specifying the destination path.
