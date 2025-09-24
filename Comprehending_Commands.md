@@ -461,4 +461,42 @@ hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ ls /op
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / An Epic Filesystem Quest module pages   
 
 
+# Making directories
+This challenge teaches how to create directories with `mkdir` and then place files inside them using `touch`.  
+We have to create `/tmp/pwn` and then create a file named `college` inside it. After that we have to run `/challenge/run` which will check the work and provide the flag.
+
+## My solution
+**Flag:** `pwn.college{MB4zImdcoxT50N8Ps-6q3sufNUE.QXxMDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now change directory to `/tmp`. and then create `pwn` directory using `mkdir`.
+    ```bash
+    hacker@commands~making-directories:~$ cd /tmp
+    hacker@commands~making-directories:/tmp$ mkdir pwn
+    ```
+3. Now create the `college` file using `touch` command and verify it using `ls` command.
+    ```bash
+    hacker@commands~making-directories:/tmp$ touch pwn/college
+    hacker@commands~making-directories:/tmp$ ls pwn/
+    college
+    ```
+4. Now run the final run command to check and get the flag.
+    ```bash
+    hacker@commands~making-directories:/tmp$ /challenge/run
+    Success! Here is your flag:
+    pwn.college{MB4zImdcoxT50N8Ps-6q3sufNUE.QXxMDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+Here both relative and absolute paths in all the commands are acceptable. Just the prompts are changed according to that.
+
+## What I learned
+1. Creating directories: `mkdir` creates directories with the name of directory as argument.
+2. Creating files within directories: `touch` creates empty files quickly and `mkdir` used for making directory.
+3. More options can be seen using `mkdir --help`.(Here --help can be used with any function to get info about it.)
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Making directories module pages   
+- Got to know from [mkdir commands](https://www.geeksforgeeks.org/linux-unix/mkdir-command-in-linux-with-examples/) that multiple directories can be made at a single time.
+
 
