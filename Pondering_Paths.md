@@ -285,3 +285,55 @@ The challenge tests how relative paths change depending on cwd(current working d
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths / Implicit relative paths, from / module pages.
 - Got to know difference between `cwd` and `pwd` from a [QNA website](https://unix.stackexchange.com/questions/709896/what-is-the-difference-between-cwd-and-pwd). `pwd` prints the current working directory (a command) while `cwd` is like a concept that shows the current working directory.
+
+
+# Explicit relative paths, from /
+In this challenge we have to first go to root directory and from there run a relative path but using `.` which represents same directory. From `/` (the root), the relative path `challenge/run` and the explicit relative path `./challenge/run` both refer to the same file `/challenge/run`.
+
+## My solution
+
+**Flag:** `pwn.college{0iMuPP_SssrnyxhXqkQvvRT2KZU.QXwUTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+    ```bash
+    neel@NeelTech:~$ ssh -i ./key hacker@dojo.pwn.college
+    Connected!
+    ```
+2. Now the shell is connected to dojo. Ensure I am at the root directory and confirm cwd
+    ```bash
+    hacker@paths~explicit-relative-paths-from-:~$ pwd
+    /home/hacker
+    hacker@paths~explicit-relative-paths-from-:~$ cd /
+    hacker@paths~explicit-relative-paths-from-:/$ pwd
+    /
+    ```
+3. Run the challenge program using one of them - here I have used `./challenge/run` — which is explicit relative from `/` to get the flag.
+    ```bash
+    hacker@paths~explicit-relative-paths-from-:/$ ./challenge/run
+    Correct!!!
+    ./challenge/run is a relative path, invoked from the right directory!
+    Here is your flag:
+    pwn.college{0iMuPP_SssrnyxhXqkQvvRT2KZU.QXwUTN0wCO2kjNzEzW}
+    ```
+4. The flag appeared on the screen, which I then copied and submitted on [pwn.college](https://pwn.college/linux-luminarium/paths/) to complete the challenge.
+
+Here any example can work as long as the explicit relative path points to same location...
+```bash
+hacker@paths~explicit-relative-paths-from-:/$ ././challenge/./run
+hacker@paths~explicit-relative-paths-from-:/$ ./challenge/././run
+```
+## What I learned
+
+1. `.` explicitly shows the current-directory, `./file` is a relative path that starts from the cwd.
+
+2. Special notations in paths
+    - `.` refers to the current directory.
+    - `..` refers to the parent directory.
+
+3. Practical use-cases:
+    - Using `./program` is good practise to ensure you do not run file with the same name on another location.
+4. Redundancy is allowed
+    - multiple `./` or `././` fragments are allowed and points to same cwd.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/paths/) - Pondering Paths /  Explicit relative paths, from / module pages.
