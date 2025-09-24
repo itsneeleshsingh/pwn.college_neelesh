@@ -500,3 +500,62 @@ Here both relative and absolute paths in all the commands are acceptable. Just t
 - Got to know from [mkdir commands](https://www.geeksforgeeks.org/linux-unix/mkdir-command-in-linux-with-examples/) that multiple directories can be made at a single time.
 
 
+# Finding files
+This challenge teaches the `find` command to search for files and directories across the filesystem.  
+In this challenge, the flag file is named `flag` and hidden somewhere on the filesystem. There are multiple files named `flag` on the system, and many directories that we cannot access. We have to use `find` to locate the real one, then `cat` it.
+
+## My solution
+**Flag:** `pwn.college{wSvBe3PTjfmTszEGbatGUozA6Pc.QXyMDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. First i tried to search all the files/folder with name `flag` from the root directory.
+    ```bash
+    hacker@commands~finding-files:~$ find / -name flag
+    find: ‘/root’: Permission denied
+    find: ‘/etc/ssl/private’: Permission denied
+    find: ‘/tmp/tmp.TpSOPGOVKK’: Permission denied
+    /usr/local/lib/python3.8/dist-packages/pwnlib/flag
+    /usr/lib/debug/.build-id/4b/flag
+
+    ^C
+    ```
+    Since it was searching i stopped it using ctrl+c command.
+3. Now I got two locations which was accessible.
+    - `/usr/local/lib/python3.8/dist-packages/pwnlib/flag`
+    - `/usr/lib/debug/.build-id/4b/flag`
+4. So first I went for first one. I typed `cat` command but it was a directorry. So I went for the folder and list out all the files using `cd`. After i read the `flag.py` file which had a python code and no flag in it.
+    ```bash
+    hacker@commands~finding-files:~$ cat /usr/local/lib/python3.8/dist-packages/pwnlib/flag
+    cat: /usr/local/lib/python3.8/dist-packages/pwnlib/flag: Is a directory
+    hacker@commands~finding-files:~$ cd /usr/local/lib/python3.8/dist-packages/pwnlib/flag
+    hacker@commands~finding-files:/usr/local/lib/python3.8/dist-packages/pwnlib/flag$ ls
+    __init__.py  __pycache__  flag.py
+    hacker@commands~finding-files:/usr/local/lib/python3.8/dist-packages/pwnlib/flag$ cat flag.py
+    """Describes a way to submit a key to a key server.
+    """
+    from __future__ import absolute_import
+    from __future__ import division
+
+    import os
+
+    from pwnlib.args import args
+    ```
+5. Then i tried to open the second directory. But it was a file. So i tried to read it with `cat` which from i got the flag.
+    ```bash
+    hacker@commands~finding-files:/usr/local/lib/python3.8/dist-packages/pwnlib/flag$ cd /usr/lib/debug/.build-id/4b/flag
+    bash: cd: /usr/lib/debug/.build-id/4b/flag: Not a directory
+    hacker@commands~finding-files:/usr/local/lib/python3.8/dist-packages/pwnlib/flag$ cat /usr/lib/debug/.build-id/4b/flag
+    hacker@commands~finding-files:/usr/local/lib/python3.8/dist-packages/pwnlib/flag$ -fil/usr/lib/debug/.build-id/4b/flag-packages/pwnlib/flag$ cat /usr/lib/debug/.build-id/4b/flag
+    pwn.college{wSvBe3PTjfmTszEGbatGUozA6Pc.QXyMDO0wCO2kjNzEzW}
+    ```
+
+6. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+## What I learned
+1. `find` basics - used to search from a starting directory, with filters like `-name`.
+2. Got to know more crystal clear when to apply which command to handle file and directory cases.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Finding files module pages  
+
+
