@@ -351,3 +351,114 @@ In this challenge we have to find a flag file hidden at the root `/` whose name 
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Hidden files module pages   
 
 
+# An Epic Filesystem Quest
+In this challenge we have to use past learned experience and knowledge like `cd`, `ls` and `cat` top reach to the treasure that is flag.  
+We have to start at `/` and must follow a chain of hints to reach to the end.
+
+## My solution
+**Flag:** `pwn.college{Erl8BId5v-YzT1mml5n0eYervws.QX5IDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now start using the root command and follow the instruction till the end.
+```bash
+hacker@commands~an-epic-filesystem-quest:~$ ls -a
+.  ..  .ICEauthority  .bash_history  .cache  .config  .dbus  .local  Desktop  t
+hacker@commands~an-epic-filesystem-quest:~$ cd /
+hacker@commands~an-epic-filesystem-quest:/$ ls
+CUE  boot       dev  flag  lib    lib64   media  nix  proc  run   srv  tmp  var
+bin  challenge  etc  home  lib32  libx32  mnt    opt  root  sbin  sys  usr
+hacker@commands~an-epic-filesystem-quest:/$ cat CUE
+Lucky listing!
+The next clue is in: /usr/share/X11/locale/iso8859-6
+
+The next clue is **hidden** --- its filename starts with a '.' character. You'll need to look for it using special options to 'ls'.
+hacker@commands~an-epic-filesystem-quest:/$ cd /usr/share/X11/locale/iso8859-6
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ ls -a
+.  ..  .BLUEPRINT  Compose  XI18N_OBJS  XLC_LOCALE
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ cat .BLUEPRINT
+Tubular find!
+The next clue is in: /opt/linux/linux-5.4/arch/mips/boot/dts/lantiq
+
+Watch out! The next clue is **trapped**. You'll need to read it out without 'cd'ing into the directory; otherwise, the clue will self destruct!
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ ls /opt/linux/linux-5.4/arch/mips/boot/dts/lantiq
+Makefile  NUGGET-TRAPPED  danube.dtsi  easy50712.dts
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ ls /opt/linux/linux-5.4/arch/mips/boot/dts/lantiq -a
+.  ..  Makefile  NUGGET-TRAPPED  danube.dtsi  easy50712.dts
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ cat /opt/linux/linux-5.4/arch/mips/boot/dts/lantiq/Makefile
+# SPDX-License-Identifier: GPL-2.0
+dtb-$(CONFIG_DT_EASY50712)      += easy50712.dtb
+
+obj-$(CONFIG_BUILTIN_DTB)       += $(addsuffix .o, $(dtb-y))
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ cat /opt/linux/linux-5.4/arch/mips/boot/dts/lantiq/NUGGET-TRAPPED
+Tubular find!
+The next clue is in: /var/lib/dictionaries-common
+
+The next clue is **delayed** --- it will not become readable until you enter the directory with 'cd'.
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ cd /var/lib/dictionaries-common
+hacker@commands~an-epic-filesystem-quest:/var/lib/dictionaries-common$ ls
+NOTE  hunspell  wordlist
+hacker@commands~an-epic-filesystem-quest:/var/lib/dictionaries-common$ cat NOTE
+Congratulations, you found the clue!
+The next clue is in: /opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr
+
+The next clue is **delayed** --- it will not become readable until you enter the directory with 'cd'.
+hacker@commands~an-epic-filesystem-quest:/var/lib/dictionaries-common$ cd  /opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr
+hacker@commands~an-epic-filesystem-quest:/opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr$ ls
+HINT  irq.h
+hacker@commands~an-epic-filesystem-quest:/opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr$ cat HINT
+Tubular find!
+The next clue is in: /usr/share/javascript/three/examples/js/loaders/obj2/worker/parallel
+
+The next clue is **hidden** --- its filename starts with a '.' character. You'll need to look for it using special options to 'ls'.
+hacker@commands~an-epic-filesystem-quest:/opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr$ ls /usr/share/javascript/three/examples/js/loaders/obj2/worker/parallel -a
+.  ..  .BRIEF  OBJLoader2Parser.js  WorkerRunner.js  jsm
+hacker@commands~an-epic-filesystem-quest:/opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr$ cat /usr/share/javascript/three/examples/js/loaders/obj2/worker/parallel/.BRIEF
+Congratulations, you found the clue!
+The next clue is in: /usr/share/racket/pkgs/html
+
+The next clue is **delayed** --- it will not become readable until you enter the directory with 'cd'.
+hacker@commands~an-epic-filesystem-quest:/opt/busybox/busybox-1.33.2/include/config/feature/ifconfig/memstart/ioaddr$ cd  /usr/share/racket/pkgs/html
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/html$ ls
+CLUE  LICENSE.txt  info.rkt
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/html$ cat CLUE
+Yahaha, you found me!
+The next clue is in: /usr/share/maxima-sage/5.42.2/share/sym
+
+The next clue is **hidden** --- its filename starts with a '.' character. You'll need to look for it using special options to 'ls'.
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/html$ ls  /usr/share/maxima-sage/5.42.2/share/sym -a
+.             direct.lisp    elem.lisp                 multmon.lisp      resolv1.lisp    symtest.mac
+..            doconline      kak.lisp                  operations.lisp   resolvante.mac  testsuite.lisp
+.TEASER       docsym-en.tex  lecteur.lisp              partpol.lisp      schur.lisp      treillis.lisp
+arite.lisp    docsym-fr.tex  load-sym-lisp-files.lisp  permut.lisp       sym.mac         tri.lisp
+chbase.lisp   docsymidx.tex  macros.lisp               pui.lisp          sym.system      util.lisp
+compile.lisp  ecrivain.lisp  makefile                  resolcayley.lisp  sym1.mac
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/html$ cat  /usr/share/maxima-sage/5.42.2/share/sym/.TEASER
+Great sleuthing!
+The next clue is in: /opt/libslub/test
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/html$ cd /opt/libslub/test
+hacker@commands~an-epic-filesystem-quest:/opt/libslub/test$ ls
+MESSAGE  Makefile  libslub.gdb  test.c
+hacker@commands~an-epic-filesystem-quest:/opt/libslub/test$ cat M
+MESSAGE   Makefile
+hacker@commands~an-epic-filesystem-quest:/opt/libslub/test$ cat MESSAGE
+CONGRATULATIONS! Your perserverence has paid off, and you have found the flag!
+It is: pwn.college{Erl8BId5v-YzT1mml5n0eYervws.QX5IDO0wCO2kjNzEzW}
+```
+
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+In between while in the directory. I was confused with the file names so i tried and open some to reach till the `NUGGET-TRAPPED` file.
+```bash
+hacker@commands~an-epic-filesystem-quest:/usr/share/X11/locale/iso8859-6$ ls /opt/linux/linux-5.4/arch/mips/boot/dts/lantiq -a
+.  ..  Makefile  NUGGET-TRAPPED  danube.dtsi  easy50712.dts
+```
+
+## What I learned
+1. `cd`, `ls` and `cat` are very important function and through this i was able to solve this amazing challenge.
+2. Focus here was very important and to read the instructions clearly.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / An Epic Filesystem Quest module pages   
+
+
+
