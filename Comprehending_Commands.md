@@ -135,3 +135,63 @@ Here flag was not printed or stored in a single file. There was a filee with hun
 - Just learned some 2-3 more arguments from [grep command](https://www.geeksforgeeks.org/linux-unix/grep-command-in-unixlinux/) like `grep -c` to count the number of lines it matches with the given string.
 
 
+# Comparing files
+In this challenge we have to use `diff` command. `diff` is useful when you want to find small differences across large files like spotting the single real flag among many decoys in this case.
+
+## My solution
+**Flag:** `pwn.college{4VilRrjuTlAfvdo1K4u1glcbvn9.01MwMDOxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. `/challenge/decoys_only.txt` contains 100 fake flags.  
+and `/challenge/decoys_and_real.txt` contains those 100 fake flags **plus** one real flag. Thus use `diff`  with specifying both the files to get the flag as that is what the difference between the flag is..
+    ```bash
+    hacker@commands~comparing-files:~$ diff /challenge/decoys_only.txt /challenge/decoys_and_real.txt
+    8a9
+    > pwn.college{4VilRrjuTlAfvdo1K4u1glcbvn9.01MwMDOxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+Here I used the tab key to autocomplete the path. That saves time when the paths are long specially cases like this one.
+- Also `8a9` shows that the file `/challenge/decoys_and_real.txt` contained the real extra flag on the line 9.
+
+## What I learned
+1. How to read `diff` between two files.
+2. `8a9` in this case showed the difference in the line 9 of `/challenge/decoys_and_real.txt` compared to after line 8 of `/challenge/decoys_only.txt`.
+3. Here in `diff`, absolute paths are provided. On searching on internet - I got to know that we can also provide relative paths to the `diff` command.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Comparing files module pages   
+
+
+# Listing files
+In this challenge the `/challenge/run` is renamed to any other name. We have to explore the file names under the `/challenge` directory. Thus using `ls` command we can find the renamed program and can run using its path.
+
+## My solution
+**Flag:** `pwn.college{Y86GSKPgSPPx9qe_vQxbWs7ANbO.QX4IDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Therefore to search under `challenge` path we can use `ls` command for that and challenge as an argument.
+    ```bash
+    hacker@commands~listing-files:~$ ls /challenge
+    2373-renamed-run-9470  DESCRIPTION.md
+    ```
+3. Now `2373-renamed-run-9470` is most probably the program as it was mentioned that the program was renamed. Thus we have to run it normally using absolute path.
+    ```bash
+    hacker@commands~listing-files:~$ /challenge/2373-renamed-run-9470
+    Yahaha, you found me! Here is your flag:
+    pwn.college{Y86GSKPgSPPx9qe_vQxbWs7ANbO.QX4IDO0wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+Here I tried to use `grep` function in it. But it is only useful when we know the name of the file. Thus here it shows that it is a directory.
+```bash
+hacker@commands~listing-files:~$ grep pwn.college /challenge/
+grep: /challenge/: Is a directory
+```
+## What I learned
+1. `ls` is the primary discovery tool for finding files and directories that lists out the files and folders.
+2. I noticed that only directories were showing. Thus after some research i got to know that we can use `ls --all` to get all the files and folers with hidden files starting with `.` dot.
+3. If we only write `ls` - It shows the files and folders of the cwd while we can provide any relative or absolute path in it.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Listing files module pages   
