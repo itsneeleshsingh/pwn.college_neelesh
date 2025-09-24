@@ -312,3 +312,42 @@ Note that the flag is not in our home directory, Its under the `/` root director
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Moving files module pages   
 - Read liitle more from [mv command](https://www.geeksforgeeks.org/linux-unix/mv-command-linux-examples/) and got to know that we can move multiple files at once by just specifying files as arguments and at last specifying the destination path.
+
+
+# Hidden files
+This challenge shows that files whose names start with a dot `.` are hidden from normal `ls` output.  
+We can list all the files using `ls -a` or `ls --all`.
+In this challenge we have to find a flag file hidden at the root `/` whose name begins with a dot.
+
+## My solution
+**Flag:** `pwn.college{wi9M9b4d428QW0vt1_YuEj6zkXa.QXwUDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Since the flag is hidden in root folder. We must change the directory and try to use normal `ls` command.
+    ```bash
+    hacker@commands~hidden-files:~$ cd /
+    hacker@commands~hidden-files:/$ ls
+    bin   challenge  etc   lib    lib64   media  nix  proc  run   srv  tmp  var
+    boot  dev        home  lib32  libx32  mnt    opt  root  sbin  sys  usr
+    ```
+3. Here it will not show hidden files. Thus we have to use `-a` meaning all files that include hidden files.
+    ```bash
+    hacker@commands~hidden-files:/$ ls -a
+    .   .dockerenv            bin   challenge  etc   lib    lib64   media  nix  proc  run   srv  tmp  var
+    ..  .flag-10060416515628  boot  dev        home  lib32  libx32  mnt    opt  root  sbin  sys  usr
+    ```
+4. Hence we can see hidden file named `.flag-10060416515628`. Now we can open it by `cat` function, writing just starting and using tab to autocomplete.
+    ```bash
+    hacker@commands~hidden-files:/$ cat .flag-10060416515628
+    pwn.college{wi9M9b4d428QW0vt1_YuEj6zkXa.QXwUDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/commands/) to complete the challenge.
+
+## What I learned
+1. Dotfiles are hidden by default that is filenames starting with `.` are not shown by normal `ls`.
+2. Reveal hidden files with `ls -a`.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/commands/) - Comprehending Commands / Hidden files module pages   
+
+
