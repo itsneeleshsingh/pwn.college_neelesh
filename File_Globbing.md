@@ -107,3 +107,37 @@ Here we do not mentioned absolute paths for `file_[bash]` because our cwd was `/
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Matching with [] module pages
+
+
+# Matching paths with []
+This challenge shows that globs apply to path components which means that we can use bracket globs inside full absolute paths.In this challenge we have to run command from our home directory, run `/challenge/run` with a single argument that bracket-globs into the absolute paths for four files: `file_b, file_a, file_s, and file_h`.
+
+## My solution
+**Flag:** `pwn.college{gmHc4yCPLthwKVXM2wKsap9zaqe.QX0IDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So we have to run the challenge program with that single glob argument - that is ` /challenge/files/file_[bash]` that is absolute path.
+    ```bash
+    hacker@globbing~matching-paths-with-:~$ /challenge/run /challenge/files/file_[bash]
+    You got it! Here is your flag!
+    pwn.college{gmHc4yCPLthwKVXM2wKsap9zaqe.QX0IDO0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+**Note:** that here we have to run the command through home directory. By mistake i executed it through `/challenge/files`.
+```bash
+hacker@globbing~matching-paths-with-:~$ cd /challenge/files/
+hacker@globbing~matching-paths-with-:/challenge/files$ /challenge/run /challenge/files/file_[bash]
+Error: please run with a working directory of /home/hacker!
+hacker@globbing~matching-paths-with-:/challenge/files$ cd ~
+hacker@globbing~matching-paths-with-:~$
+```
+
+## What I learned
+1. Bracket `[]` patterns also work inside absolute paths as inside filenames.
+2. The bracket expression `[bash]` matches one character in that set (b, a, s, h).
+3. We are passing one argument to `/challenge/run` but the shell expands that into four pathnames before the program runs.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Matching paths with [] module pages
+- Only small part i read from [Matching paths with []](https://www.files.com/docs/automations/matching-source-path-and-filenames) and found that for series matchin we can use - `[a-d]` for all letters a to d matching instead of writing manually.
