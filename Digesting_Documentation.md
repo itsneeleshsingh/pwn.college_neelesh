@@ -232,3 +232,50 @@ Initially I gave more time from reading the `man man` manpage from starting, Ins
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Searching For Manuals module pages
+
+
+# Helpful Programs
+This challenge teaches us with `help` argument. We have to run the challenge program's help to discover the option that prints the flag
+
+## My solution
+**Flag:** `pwn.college{o6Vvnf1YuFIoGkZtw9d0h-raiXx.QX3IDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now since nothing was mentioned, i tried to get help of `/challenge/challenge`.
+    ```bash
+    hacker@man~helpful-programs:~$ /challenge/challenge --help
+    usage: a challenge to make you ask for help [-h] [--fortune] [-v] [-g GIVE_THE_FLAG] [-p]
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    --fortune             read your fortune
+    -v, --version         get the version number
+    -g GIVE_THE_FLAG, --give-the-flag GIVE_THE_FLAG
+                            get the flag, if given the correct value
+    -p, --print-value     print the value that will cause the -g option to give you the flag
+    ```
+3. Here `-p` will print us any secret key. So using that.
+    ```bash
+    hacker@man~helpful-programs:~$ /challenge/challenge -p
+    The secret value is: 619
+    ```
+4. Now since i got the key, I have to put it with the `-g` command with secret key also as argumenet next to it.
+    ```bash
+    hacker@man~helpful-programs:~$ /challenge/challenge -g 619
+    Correct usage! Your flag: pwn.college{o6Vvnf1YuFIoGkZtw9d0h-raiXx.QX3IDO0wCO2kjNzEzW}
+    ```
+**My mistake:** I misinterpreted the `-g` command and directly executed it.
+```bash
+hacker@man~helpful-programs:~$ /challenge/challenge -g
+usage: a challenge to make you ask for help [-h] [--fortune] [-v] [-g GIVE_THE_FLAG] [-p]
+a challenge to make you ask for help: error: argument -g/--give-the-flag: expected one argument
+```
+
+## What I learned
+1. The `--help` or `-h` arguments can be helpful when they do not have proper manpage and we have to know how to run them.
+2. In rare cases `-?`, `help`, or other esoteric values like `/?` can also be used specially in windows.
+3. I also learned the importance of carefully reading the instructions.
+
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Helpful Programs module pages
