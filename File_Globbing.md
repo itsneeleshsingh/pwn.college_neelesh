@@ -310,3 +310,25 @@ No ls for you in this level! Use tab-completion instead!
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Multiple options for tab completion module pages
+
+
+# Tab completion on commands
+Tab-completion works for commands too that means the shell can autocomplete executable names. This challenge hides a command whose name begins with `pwncollege` and running it prints the flag.
+
+## My solution
+**Flag:** `pwn.college{0BNv07tTKyiaDQOdDgRnOyyeI5Y.0VN0EzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now I wrote `pwnco` and clicked on tab and it autocompletes to - `pwncollege-23977`.
+    ```bash
+    hacker@globbing~tab-completion-on-commands:~$ pwncollege-23977
+    Correct! Here is your flag:
+    pwn.college{0BNv07tTKyiaDQOdDgRnOyyeI5Y.0VN0EzNxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+## What I learned
+1. The shell also autocompletes command names when tab is pressed.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Tab completion on commands module pages
