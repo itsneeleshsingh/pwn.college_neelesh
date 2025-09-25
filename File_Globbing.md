@@ -272,6 +272,41 @@ This challenge teaches tab completion. They copied the flag into a file whose vi
 2. We use Tab to avoid typing mistakes and to reveal tricky filenames.
 3. Tab completion is safer than blind globbing because it helps you specify exact targets and avoids accidental matches.
 
-
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Tab completion module pages
+
+
+# Multiple options for tab completion
+In this challenge, There is a `/challenge/files` directory with many files starting with pwncollege…. We have to start typing `/challenge/files/p` and use tab-completion to reach the exact file that contains the flag, then cat it.
+
+## My solution
+**Flag:** `pwn.college{E_qFOJaTSC_H-TNo0J8ynBgq4Yp.0lN0EzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So i started to look for the directory using `ls` command and then typing `/challenge/files/p` and then tab. First it autocompleted till `/challenge/files/pwn`. After the second tab it dosent responded and after that, on tab it displayed all the files starting with `p`.
+    ```bash
+    hacker@globbing~multiple-options-for-tab-completion:~$ ls /challenge/files/pwn
+    pwn                    pwncollege-family      pwncollege-flyswatter
+    pwn-college            pwncollege-flag        pwncollege-hacking
+    pwn-the-planet         pwncollege-flamingo
+    hacker@globbing~multiple-options-for-tab-completion:~$ ls /challenge/files/pwn
+    ```
+3. I got to know that the flag is in `pwncollege-flag` and used `cat` function to print the flag.
+    ```bash
+    hacker@globbing~multiple-options-for-tab-completion:~$ cat /challenge/files/pwncollege-flag
+    pwn.college{E_qFOJaTSC_H-TNo0J8ynBgq4Yp.0lN0EzNxwCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+**Note:** You cannot directly access all the files as that is restricted in this challenge.
+```bash
+hacker@globbing~multiple-options-for-tab-completion:~$ ls /challenge/files/
+No ls for you in this level! Use tab-completion instead!
+```
+
+## What I learned
+1. Tab completion helps us finish filenames/commands safely instead of guessing or globbing.
+2. If there are many matches then press tab once the shell completes prefix and if we press tab again, it list all the matches available in that directory.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Multiple options for tab completion module pages
