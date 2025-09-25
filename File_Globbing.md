@@ -71,3 +71,39 @@ hacker@globbing~matching-with-:/challenge$
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Matching with ? module pages
+
+
+# Matching with []
+This challenge teaches bracket globs `[]`, which matches exactly one character from a given subset. In this challenge we have to change directory to `/challenge/files` and run `/challenge/run` with a single argument that bracket-globs into the four files - `file_b, file_a, file_s, and file_h`.
+
+## My solution
+**Flag:** `pwn.college{obNyIiRb9Qrb6JZ9zihnS3gk-Xt.QXzIDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. I changed to the challenge files directory.
+    ```bash
+    hacker@globbing~matching-with-:~$ cd /challenge/files/
+    hacker@globbing~matching-with-:/challenge/files$
+    ```
+3. I tried to check which files are there. On using `ls` I got to know that there were many files.
+    ```bash
+    hacker@globbing~matching-with-:/challenge/files$ ls
+    file_a  file_d  file_g  file_j  file_m  file_p  file_s  file_v  file_y
+    file_b  file_e  file_h  file_k  file_n  file_q  file_t  file_w  file_z
+    file_c  file_f  file_i  file_l  file_o  file_r  file_u  file_x
+    ```
+4. Now since we have to run commands only with thode file names. We can put `file_[bash]` for files `file_b, file_a, file_s, and file_h`.
+    ```bash
+    hacker@globbing~matching-with-:/challenge/files$ /challenge/run file_[bash]
+    You got it! Here is your flag!
+    pwn.college{obNyIiRb9Qrb6JZ9zihnS3gk-Xt.QXzIDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+Here we do not mentioned absolute paths for `file_[bash]` because our cwd was `/challenge/files` itself, which contained all the files.
+
+## What I learned
+1. `[]` matches one character from a set we provide. Also written in challenge documentation - `is a wildcard for some subset of potential characters, specified within the brackets.`
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Matching with [] module pages
