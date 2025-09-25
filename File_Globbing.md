@@ -141,3 +141,41 @@ hacker@globbing~matching-paths-with-:~$
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Matching paths with [] module pages
 - Only small part i read from [Matching paths with []](https://www.files.com/docs/automations/matching-source-path-and-filenames) and found that for series matchin we can use - `[a-d]` for all letters a to d matching instead of writing manually.
+
+
+# Multiple globs
+This challenge teaches that a single word may contain multiple glob. In this challnege first we have to change directory to `/challenge/files`, then run `/challenge/run` with one argument - a 3 characters or less globbed word that contains two `*` globs and matches every filename that contains the letter `p` in that directory.
+
+## My solution
+**Flag:** `pwn.college{kpzkSDkOBJXhvo-wmJqCXGiKJfl.0lM3kjNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. First we have to Change into the files directory.
+    ```bash
+    hacker@globbing~multiple-globs:~$ cd /challenge/files/
+    hacker@globbing~multiple-globs:/challenge/files$
+    ```
+3. We can see all the files.
+    ```bash
+    hacker@globbing~multiple-globs:/challenge/files$ ls
+    amazing      educational  incredible  magical     queenly    uplifting   youthful
+    beautiful    fantastic    jovial      nice        radiant    victorious  zesty
+    challenging  great        kind        optimistic  splendid   wonderful
+    delightful   happy        laughing    pwning      thrilling  xenial
+    ```
+4. Now we have to run the `/challenge/run` but with all the files that contains `p`. This can be done with `*p*` which means that before p and after p anything can be there.
+    ```bash
+    hacker@globbing~multiple-globs:/challenge/files$ /challenge/run *p*
+    You got it! Here is your flag!
+    pwn.college{kpzkSDkOBJXhvo-wmJqCXGiKJfl.0lM3kjNxwCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+Here the `*p*` is less than 3 characters which ssatisfy the condition provided.
+
+## What I learned
+1. We can place multiple globs inside a single word.
+2. `*x*` is an common approach to match filenames that contain single letter `x`. Here x may not be a single letter, it can be substring also.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Multiple globs module pages
