@@ -251,3 +251,27 @@ pwn.college{Y7lqjvGHh7Dur2Rwg1JUCU4ixnA.QX2IDO0wCO2kjNzEzW}
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Exclusionary globbing module pages
+
+
+# Tab completion
+This challenge teaches tab completion. They copied the flag into a file whose visible name is `pwncollege` but the actual filename contains tricky characters so typing it normally is not possible. We have to use tab completion to expand the name correctly.
+
+## My solution
+**Flag:** `pwn.college{cQtnE2BVHZ_JST2imb9aYlPxA7J.0FN0EzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. I tried to `cat` file using autocomplete. First wrote `/cha` then tab and then again `/challenge/pw` and tab to autocomplete. Then pressed enter to execute and it printed me the flag.
+    ```bash
+    hacker@globbing~tab-completion:~$ cat /challenge/pwncollege​
+    pwn.college{cQtnE2BVHZ_JST2imb9aYlPxA7J.0FN0EzNxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+## What I learned
+1. `tab` is used to autocomplete filenames, commands, variables, etc...
+2. We use Tab to avoid typing mistakes and to reveal tricky filenames.
+3. Tab completion is safer than blind globbing because it helps you specify exact targets and avoids accidental matches.
+
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Tab completion module pages
