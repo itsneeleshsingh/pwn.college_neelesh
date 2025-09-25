@@ -264,6 +264,8 @@ This challenge teaches us with `help` argument. We have to run the challenge pro
     hacker@man~helpful-programs:~$ /challenge/challenge -g 619
     Correct usage! Your flag: pwn.college{o6Vvnf1YuFIoGkZtw9d0h-raiXx.QX3IDO0wCO2kjNzEzW}
     ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/man/) to complete the challenge.
+
 **My mistake:** I misinterpreted the `-g` command and directly executed it.
 ```bash
 hacker@man~helpful-programs:~$ /challenge/challenge -g
@@ -279,3 +281,63 @@ a challenge to make you ask for help: error: argument -g/--give-the-flag: expect
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Helpful Programs module pages
+
+
+# Help for Builtins
+This challenge teaches how to read help for shell builtins. Builtins are commands implemented inside the shell rather than external programs. We use `help` builtin to get usage information. In this challenge we have to get info with `help` command for shell builtin `challenge`, read interpret and find the flag.
+
+## My solution
+**Flag:** `pwn.college{IkQajRS1mfpJ423LR2xXIi9hNnD.QX0ETO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Read the builtin challenge using `help`. 
+    ```bash
+    hacker@man~help-for-builtins:~$ help challenge
+    challenge: challenge [--fortune] [--version] [--secret SECRET]
+        This builtin command will read you the flag, given the right arguments!
+
+        Options:
+        --fortune         display a fortune
+        --version         display the version
+        --secret VALUE    prints the flag, if VALUE is correct
+
+        You must be sure to provide the right value to --secret. That value
+        is "IkQajRS1".
+    ```
+3. Now it is wriiten that to print the flag we have to give it argument `--secret` with value `"IkQajRS1"`.
+    ```bash
+    hacker@man~help-for-builtins:~$ challenge --secret IkQajRS1
+    Correct! Here is your flag!
+    pwn.college{IkQajRS1mfpJ423LR2xXIi9hNnD.QX0ETO0wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/man/) to complete the challenge.
+
+Here we can also verify - that challenge does not have any manpage.
+```bash
+hacker@man~help-for-builtins:~$ man challenge
+No manual entry for challenge
+```
+
+## What I learned
+1. Builtins are internal to the shell and we use `help` to read their documentation.
+2. Builtins are invoked just like commands, but the shell handles them internally instead of launching other programs.
+3. We can get list of builtins just by executing `help` command.
+    ```bash
+    neel@NeelTech:~/pwn.college_neelesh$ help
+    GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+    These shell commands are defined internally.  Type `help' to see this list.
+    Type `help name' to find out more about the function `name'.
+    Use `info bash' to find out more about the shell in general.
+    Use `man -k' or `info' to find out more about commands not in this list.
+
+    A star (*) next to a name means that the command is disabled.
+
+    job_spec [&]                              history [-c] [-d offset] [n] or histor>
+    (( expression ))                          if COMMANDS; then COMMANDS; [ elif COM>
+    . filename [arguments]                    jobs [-lnprs] [jobspec ...] or
+    (and so on.....)
+    ```
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Help for Builtins module pages
+- Learned some more arguments from [help command in linux](https://www.geeksforgeeks.org/linux-unix/help-command-in-linux-with-examples/) like `-d` for Overview of the commands and `-s` for Syntax only.
