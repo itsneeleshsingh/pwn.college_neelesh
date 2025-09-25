@@ -216,3 +216,38 @@ Note here multiple answers can be correct that matches with ONLY those 3 filenam
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Mixing globs module pages
+
+
+# Exclusionary globbing
+This challenge introduces globbing with `[]` but in opposite manner that is exclusion.  
+But if the first character is `!` or `!`, the meaning is inverted — it matches any character not listed. So we have to navigate to `/challenge/files` and run `/challenge/run` with a single glob argument that matches all files that do not start with - `p`, `w` and `n`.
+
+## My solution
+**Flag:** `pwn.college{Y7lqjvGHh7Dur2Rwg1JUCU4ixnA.QX2IDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So first we have to go to `/challenge/files` directory.
+    ```bash
+    hacker@globbing~exclusionary-globbing:~$ cd /challenge/files/
+    hacker@globbing~exclusionary-globbing:/challenge/files$
+    ```
+3. Now we have to run in such a way that files which do not have starting with `p`, `w` and `n` are there. So we can write - `[!pwn]*`.
+    ```bash
+    hacker@globbing~exclusionary-globbing:/challenge/files$ /challenge/run [!pwn]*
+    You got it! Here is your flag!
+    pwn.college{Y7lqjvGHh7Dur2Rwg1JUCU4ixnA.QX2IDO0wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+**Note:** Here `^` will also work.
+```bash
+hacker@globbing~exclusionary-globbing:/challenge/files$ /challenge/run [^pwn]*
+You got it! Here is your flag!
+pwn.college{Y7lqjvGHh7Dur2Rwg1JUCU4ixnA.QX2IDO0wCO2kjNzEzW}
+```
+## What I learned
+1. Exclusionary globbing allows filtering files by excluding characters which is useful when we want to avoid certain prefixes while keeping the rest.
+2. The `!` must be the first character inside the brackets as it has a different special meaning in bash.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Exclusionary globbing module pages
