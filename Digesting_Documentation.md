@@ -69,3 +69,64 @@ Correct argument! Here is the /challenge/DESCRIPTION.md file:
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Learning Complex Usage module pages
+
+
+# Reading Manuals
+This challenge introduces the `man` command that has the official documentation for most installed commands.  
+`man` displays a formatted manual page that typically contains important sections such as `NAME`, `SYNOPSIS`, `DESCRIPTION`, `OPTIONS`, and `SEE ALSO`. In this challenge `/challenge/challenge` contains a secret option documented in its manpage that will print the flag. We have to read its documentation, interpret and we get the flag.
+
+## My solution
+**Flag:** `pwn.college{MCDky4JXFv_SRnCc2_y8GrokEwm.QX0EDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now I opened the manual for the challenge program using `man` command.
+    ```bash
+    hacker@man~reading-manuals:~$ man challenge
+    ```
+3. Now it shows its manpage.
+    ```bash
+    CHALLENGE(1)                           Challenge Commands                          CHALLENGE(1)
+
+    NAME
+        /challenge/challenge - print the flag!
+
+    SYNOPSIS
+        challenge OPTION
+
+    DESCRIPTION
+        Output the flag when called with the right arguments.
+
+        --fortune
+                read a fortune
+
+        --version
+                output version information and exit
+
+        --kyvncy NUM
+                print the flag if NUM is 428
+    (and so on...)
+    ```
+4. Now under `NAME` its written that `/challenge/challenge` will print the flag and under `DESCRIPTION` its written that `--kyvncy NUM` with NUM as 428 will print us with the flag. Now press q to quit from thre manpage and then run the following commands to get the flag.
+    ```bash
+    hacker@man~reading-manuals:~$ /challenge/challenge  --kyvncy 428
+    Correct usage! Your flag: pwn.college{MCDky4JXFv_SRnCc2_y8GrokEwm.QX0EDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/man/) to complete the challenge.
+
+My Mistake: I was in hurry and put 428 as the number after the NUM argument instead of replacing it.
+```bash
+hacker@man~reading-manuals:~$ /challenge/challenge  --kyvncy NUM 428
+Incorrect usage! Please read the challenge man page!
+```
+## What I learned
+1. `man` command basics - (short for manual) and it displays the manual of the command we pass as an argument.
+2. It contains important sections such as `NAME`, `SYNOPSIS`, `DESCRIPTION`, `OPTIONS`, and `SEE ALSO`.
+3. We can scroll around the manpage with arrow keys and PgUp/PgDn. After reading we can hit `q` to quit.
+4. Manpages are stored in a centralized database under `/usr/share/man`. I tried to enter it in my machine. It showed me many functions list. I `cat` any one of them but it contained garbage values and some encrypted texts.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Learning Complex Usage module pages
+- [Online repository of man pages](https://man7.org/linux/man-pages/) - Explored its pages.
+
+
+
