@@ -179,3 +179,40 @@ Here the `*p*` is less than 3 characters which ssatisfy the condition provided.
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Multiple globs module pages
+
+
+# Mixing globs
+This challenge combines the previous globbing techniques to create a single short pattern that matches multiple files with different names. In this challenge we have to change directory into `/challenge/files`, then run `/challenge/run` with one glob argument with less than 6 characters that matches the files - `challenging` , `educational` and `pwning`.
+
+## My solution
+**Flag:** `pwn.college{8K2lbeRQMDO7P97eQCaTpLjAKXm.QX1IDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So first we have to change directory.
+    ```bash
+    hacker@globbing~mixing-globs:~$ cd /challenge/files/
+    hacker@globbing~mixing-globs:/challenge/files$
+    ```
+3. Now try to guess the pattern. First i though that `i` and `n` was common in all of them. So i executed it. But apart from it it also matached with some other.
+    ```bash
+    hacker@globbing~mixing-globs:/challenge/files$ /challenge/run *[in]*
+    Your expansion did not expand to the requested files (challenging, educational,
+    pwning). Instead, it expanded to:
+    amazing beautiful challenging delightful educational fantastic incredible jovial kind laughing magical nice optimistic pwning queenly radiant splendid thrilling uplifting victorious wonderful xenial
+    ```
+4. So after some more thoughts i decided to match only the first letter with all three files name and all others can be anything. So i executed `[cep]*` which is 6 characters and matches with first letter of all 3 file names.
+    ```bash
+    hacker@globbing~mixing-globs:/challenge/files$ /challenge/run [cep]*
+    You got it! Here is your flag!
+    pwn.college{8K2lbeRQMDO7P97eQCaTpLjAKXm.QX1IDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/globbing/) to complete the challenge.
+
+Note here multiple answers can be correct that matches with ONLY those 3 filenames and not matches with any.
+
+## What I learned
+1. Globs can be combined to match multiple files with different names.
+2. This question was there to build the logic and to test thinking capabilities.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/globbing/) - File Globbing / Mixing globs module pages
