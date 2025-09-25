@@ -168,6 +168,67 @@ We can also use `?` to search backwards. It works same as searching with `/`.
 2. `n` and `N` let us move forward/backward through matched keywords.
 3. Instead of `/` we can use `?` to search backwards. I also tried the same challenge with that also. Works exactly same just backwards search.
 
-
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Searching Manuals module pages
+
+
+# Searching For Manuals
+This challenge hides the manpage for the challenge behind a randomized manpage name. Using `man man`, We will get to know how to search for a manpage from databse. We have to find the randomly named manpage that documents the challenge, read it, then run `/challenge/challenge` with the option it has.
+
+## My solution
+**Flag:** `pwn.college{YaecsIufTFAXFusR5Hiyi7bPJ53.QX2EDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we have to read the man manual to learn how to search the manpage database. Thus we will search `man man` and will search for anything that searches the database.
+    ```bash
+    hacker@man~searching-for-manuals:~$ man man
+    ```
+3. After 5-6 minutes reading it, I discovered function that searches through manpage database.
+    ```bash
+        -k, --apropos
+                Approximately  equivalent  to apropos.  Search the short manual page descriptions
+                for keywords and display any matches.  See apropos(1) for details.
+    ```
+4. Thus using `-k` I searches for the keyword `challenge`. I found `aecsufusiy` as the only manpage. So I opened it again through its documentation.
+    ```bash
+    hacker@man~searching-for-manuals:~$ man -k challenge
+    aecsufusiy (1)       - print the flag!
+    hacker@man~searching-for-manuals:~$ man aecsufusiy
+    ```
+5. Now After reading, i got the command and the arguments to run, wwhich i run to get the flag.
+    ```bash
+    NAME
+        /challenge/challenge - print the flag!
+
+    SYNOPSIS
+        challenge OPTION
+
+    DESCRIPTION
+        Output the flag when called with the right arguments.
+
+        --fortune
+                read a fortune
+
+        --version
+                output version information and exit
+
+        --aecsuf NUM
+                print the flag if NUM is 575
+    ```
+6. Thus i executed the `/challenge/challenge` command with `--aecsuf 575` as argument as listed in the manpage.
+    ```bash
+    hacker@man~searching-for-manuals:~$ /challenge/challenge  --aecsuf 575
+    Correct usage! Your flag: pwn.college{YaecsIufTFAXFusR5Hiyi7bPJ53.QX2EDO0wCO2kjNzEzW}
+    ```
+7. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/man/) to complete the challenge.
+
+Initially I gave more time from reading the `man man` manpage from starting, Instead i could directly jump into the `OPTIONS` section.
+
+## What I learned
+1. `man man` — read how to use man itself using the `man` command.
+2. `man -k` or apropos to search the manpage index for any keyword provided.
+3. Inside `man` use `/` to search, `n / N` to navigate matches, `q` to quit.(Practised it again)
+4. Learned how to look for a specific feature argument in verly long manpages.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/man/) - Digesting Documentation / Searching For Manuals module pages
