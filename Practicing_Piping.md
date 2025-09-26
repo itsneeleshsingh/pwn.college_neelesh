@@ -37,3 +37,64 @@ doesn't look like you did it via input redirection.
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Redirecting output module pages
 - Google for some extra properties.
+
+
+# Redirecting more output
+In this challenge - `/challenge/run` prints its flag on stdout. We have to capture only the stdout into the file `myflag` so the flag ends up in that file.
+
+## My solution
+**Flag:** `pwn.college{gVgayRzemwtyhATl1vsxhxDrdc8.QX1YTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we ghave to write `/challenge/run` but also store output in the file `myflag`.
+    ```bash
+    hacker@piping~redirecting-more-output:~$ /challenge/run > myflag
+    [INFO] WELCOME! This challenge makes the following asks of you:
+    [INFO] - the challenge will check that output is redirected to a specific file path : myflag
+    [INFO] - the challenge will output a reward file if all the tests pass : /flag
+
+    [HYPE] ONWARDS TO GREATNESS!
+
+    [INFO] This challenge will perform a bunch of checks.
+    [INFO] If you pass these checks, you will receive the /flag file.
+
+    [TEST] You should have redirected my stdout to a file called myflag. Checking...
+
+    [PASS] The file at the other end of my stdout looks okay!
+    [PASS] Success! You have satisfied all execution requirements.
+    ```
+3. Now we have to read the flag using `cat` command.
+    ```bash
+    hacker@piping~redirecting-more-output:~$ cat myflag
+
+    [FLAG] Here is your flag:
+    [FLAG] pwn.college{gVgayRzemwtyhATl1vsxhxDrdc8.QX1YTN0wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+**Note:** if we only run `/challenge/run` without storing into the file. We may not able to get our flag.
+```bash
+hacker@piping~redirecting-more-output:~$ /challenge/run
+[INFO] WELCOME! This challenge makes the following asks of you:
+[INFO] - the challenge will check that output is redirected to a specific file path : myflag
+[INFO] - the challenge will output a reward file if all the tests pass : /flag
+
+[HYPE] ONWARDS TO GREATNESS!
+
+[INFO] This challenge will perform a bunch of checks.
+[INFO] If you pass these checks, you will receive the /flag file.
+
+[TEST] You should have redirected my stdout to a file called myflag. Checking...
+
+[FAIL] You did not satisfy all the execution requirements.
+[FAIL] Specifically, you must fix the following issue:
+[FAIL]   You have not redirected anything for this process' stdout.
+```
+
+## What I learned
+1. I learned how to redirect the shell output into the file itself without using predefined commands such as `echo`.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Redirecting more output module pages
+
+
