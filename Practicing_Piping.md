@@ -319,3 +319,46 @@ flagellating
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Grepping stored results module pages.
+
+
+# Grepping live output
+This challenge is shortcut for the previous challenge. Instead of saving the programs output into a file and then grepping it, we can use a pipe (`|`) to pass the output of one command directly into another.
+Since `/challenge/run` produces thousand lines and the flag is one of them, we can directly pipe its output into `grep`.
+
+## My solution
+**Flag:** `pwn.college{Qk-5E4Mv07GHCyfUERd5Q6HauYv.QX5EDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we have to execute `/challenge/run` and then directly search using `grep` using pipe in between.
+    ```bash
+    hacker@piping~grepping-live-output:~$ /challenge/run | grep pwn.college
+    [INFO] WELCOME! This challenge makes the following asks of you:
+    [INFO] - the challenge checks for a specific process at the other end of stdout : grep
+    [INFO] - the challenge will output a reward file if all the tests pass : /challenge/.data.txt
+
+    [HYPE] ONWARDS TO GREATNESS!
+
+    [INFO] This challenge will perform a bunch of checks.
+    [INFO] If you pass these checks, you will receive the /challenge/.data.txt file.
+
+    [TEST] You should have redirected my stdout to another process. Checking...
+    [TEST] Performing checks on that process!
+
+    [INFO] The process' executable is /nix/store/8b4vn1iyn6kqiisjvlmv67d1c0p3j6wj-gnugrep-3.11/bin/grep.
+    [INFO] This might be different than expected because of symbolic links (for example, from /usr/bin/python to /usr/bin/python3 to /usr/bin/python3.8).
+    [INFO] To pass the checks, the executable must be grep.
+
+    [PASS] You have passed the checks on the process on the other end of my stdout!
+    [PASS] Success! You have satisfied all execution requirements.
+    pwn.college{Qk-5E4Mv07GHCyfUERd5Q6HauYv.QX5EDO0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+Note: This time we cut out the "middleman" by piping directly, which is more efficient.
+
+## What I learned
+1. How pipes (|) connect commands so that one programs output becomes anothers input.
+2. How to avoid temporary files by directly chaining commands.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Grepping live output module pages.
