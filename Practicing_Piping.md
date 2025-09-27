@@ -362,3 +362,52 @@ Note: This time we cut out the "middleman" by piping directly, which is more eff
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Grepping live output module pages.
+
+
+# Grepping errors
+In this challenge, the twist is that the program `/challenge/run` prints all of its output on standard error FD2 instead of standard output FD1. Normally, `|` only works with stdout, so we need to merge stderr into stdout before piping into `grep`.  
+
+## My solution
+**Flag:** `pwn.college{Q2A8oQk2CCHQd79RXR6HgZMyjO0.QX1ATO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Since we have to first convert the standard error into standard output, thus we will use - `2> & 1` and then use normal pipe and `grep` to search for flag in the standard error log file.
+    ```bash
+    hacker@piping~grepping-errors:~$ /challenge/run 2>& 1 | grep pwn.college
+    [INFO] WELCOME! This challenge makes the following asks of you:
+    [INFO] - the challenge checks for a specific process at the other end of stderr : grep
+    [INFO] - the challenge will output a reward file if all the tests pass : /challenge/.data.txt
+
+    [HYPE] ONWARDS TO GREATNESS!
+
+    [INFO] This challenge will perform a bunch of checks.
+    [INFO] If you pass these checks, you will receive the /challenge/.data.txt file.
+
+    [TEST] You should have redirected my stderr to another process. Checking...
+    [TEST] Performing checks on that process!
+
+    [INFO] The process' executable is /nix/store/8b4vn1iyn6kqiisjvlmv67d1c0p3j6wj-gnugrep-3.11/bin/grep.
+    [INFO] This might be different than expected because of symbolic links (for example, from /usr/bin/python to /usr/bin/python3 to /usr/bin/python3.8).
+    [INFO] To pass the checks, the executable must be grep.
+
+    [PASS] You have passed the checks on the process on the other end of my stderr!
+    [PASS] Success! You have satisfied all execution requirements.
+    pwn.college{Q2A8oQk2CCHQd79RXR6HgZMyjO0.QX1ATO0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+**My mistake:** I actually wrote ` 2> & 1` that is gave space between the operator that will not treat `>&` redirection operator.
+```bash
+hacker@piping~grepping-errors:~$ /challenge/run 2> & 1 | grep pwn.college
+bash: syntax error near unexpected token `&'
+```
+
+## What I learned
+1. `2>&1` merges Standard error into Standard Output so both can be piped.
+2. Standard error vs Standard Output
+    - FD 1 = Standard Output
+    - FD 2 = Standard error
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Grepping errors module pages.
+
