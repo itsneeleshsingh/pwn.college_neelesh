@@ -411,3 +411,35 @@ bash: syntax error near unexpected token `&'
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Grepping errors module pages.
 
+
+# Filtering with grep -v
+This challenge teaches how to invert a grep match. `grep -v` prints lines that do not match the pattern. In the challenge, `/challenge/run` prints the real flag plus many decoy flags that contain the string `DECOY`. We only have to print the real flag.
+
+## My solution
+**Flag:** `pwn.college{8vOGLsuFrZoEE2bDTGyyh4bSt0Z.0FOxEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will get the `/challenge/run` as input using the line `|`. `grep -v 'DECOY'` keeps every line that does not contain `DECOY`.
+    ```bash
+    hacker@piping~filtering-with-grep-v:~$ /challenge/run | grep -v DECOY
+    pwn.college{8vOGLsuFrZoEE2bDTGyyh4bSt0Z.0FOxEzNxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+I just out of curiosity run the code with normal grep command.
+```bash
+hacker@piping~filtering-with-grep-v:~$ /challenge/run | grep DECOY
+pwn.college{Dk.OZxyuG40bETFzDECOYNzbrOFESEjt2WwEZs0NzC2hxyo}
+pwn.college{x0jbEy2Ezz4bGEs0ONExOD2rZzDECOYtFyuWSCkN.FwThZo}
+pwn.college{EDykzEbxNZ42w0ESytFEusOxjoDECOY0OTz.2hNGCWZbFrz}
+(and so on........)
+```
+
+## What I learned
+1. `grep -v` inverts matches that is shows lines that do not match.
+2. Sometimes, the only way to filter to just the data you want is to filter out the data you don't want.(given in challenge instructions)
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Filtering with grep -v module pages.
+
+
