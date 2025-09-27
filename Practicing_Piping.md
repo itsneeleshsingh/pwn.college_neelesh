@@ -226,3 +226,44 @@ hacker@piping~redirecting-errors:~$ cat instructions
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Redirecting errors module pages. (It was enough)
 
 
+# Redirecting input
+
+This challenge teaches input redirection - feeding a file into a program as if its contents were typed on standard input. The redirection operator for this is `<`. So we have to `/challenge/run` its input from stdin.We have to create a file named `PWN` in which we have to write the word `COLLEGE`.
+Then invoke `/challenge/run`, redirecting `PWN` into it via from stdin and then it gives us the flag.
+
+## My solution
+**Flag:** `pwn.college{Em6KSFj5oz-H199f6fwzsj7x8AV.QXwcTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now first I have to write `COLLEGE` inside filename `PWN` using previously used echo function.
+    ```bash
+    hacker@piping~redirecting-input:~$ echo COLLEGE > PWN
+    hacker@piping~redirecting-input:~$
+    ```
+3. Now we have to input redirect from the file `PWN` to `/challenge/run`.
+    ```bash
+    hacker@piping~redirecting-input:~$ /challenge/run < PWN
+    Reading from standard input...
+    Correct! You have redirected the PWN file into my standard input, and I read
+    the value 'COLLEGE' out of it!
+    Here is your flag:
+    pwn.college{Em6KSFj5oz-H199f6fwzsj7x8AV.QXwcTN0wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+## What I learned
+1. `<` redirects a file into a programs standard input (FD 0).
+2. Reuse of `echo > file` as in the previous challenges.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Redirecting input module pages.
+- Just out of curiosity reading [this](https://askubuntu.com/questions/883786/how-does-input-redirection-work) and here found how `ls file1` and `ls < file1` behaves.
+    ```bash
+    $ ls
+    file1  file2
+    $ ls file1   ## lists only file1: ls takes file names as arguments
+    file1
+    $ ls < file1 ## ls ignores its standard input, this is the same as ls alone
+    file1 file2
+    ```
+
