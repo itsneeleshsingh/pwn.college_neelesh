@@ -157,3 +157,72 @@ Note that here if you run the output in normal stdout redirection mode that is i
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Appending output module pages
 - Got to know from [How do I append text to a file?](https://stackoverflow.com/questions/17701989/how-do-i-append-text-to-a-file) that we can use `printf` directly in terminal as an alternative to `echo`.
+
+
+# Redirecting errors
+This challenge teaches us how to  redirect both standard output and standard error separately to files using file descriptor numbers. So we have to run `/challenge/run` so that - stdout that is the the flag goes into the file `myflag`, and stderr that is the instructions goes into the file instructions,and we get the flag in myflag.
+
+## My solution
+**Flag:** `pwn.college{EVJ6KprjFY68zI-hp8_enCLgjgg.QX3YTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now since we have to reduirect output into `myflag` we will use FD1 and for error/logs into `instructions` file we will use FD2...
+    ```bash
+    hacker@piping~redirecting-errors:~$ /challenge/run 1> myflag 2> instructions
+    hacker@piping~redirecting-errors:~$
+    ```
+3. Now we can see using `ls` that two files are created.
+    ```bash
+    hacker@piping~redirecting-errors:~$ ls
+    COLLEGE  Desktop  instructions  myflag  not-the-flag  t  the-flag
+    ```
+4. Now we can `cat` our file to get our flag.
+    ```bash
+    hacker@piping~redirecting-errors:~$ cat myflag
+
+    [FLAG] Here is your flag:
+    [FLAG] pwn.college{EVJ6KprjFY68zI-hp8_enCLgjgg.QX3YTN0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+Now we can also use - `>` instead of `1>` as it is by default set to redirect to Standard Output.
+```bash
+hacker@piping~redirecting-errors:~$ /challenge/run > myflag 2> instructions
+hacker@piping~redirecting-errors:~$
+```
+
+Also we can see what's written in `instructions` file.
+```bash
+hacker@piping~redirecting-errors:~$ cat instructions
+[INFO] WELCOME! This challenge makes the following asks of you:
+[INFO] - the challenge will check that output is redirected to a specific file path : myflag
+[INFO] - the challenge will check that error output is redirected to a specific file path : instructions
+[INFO] - the challenge will output a reward file if all the tests pass : /flag
+
+[HYPE] ONWARDS TO GREATNESS!
+
+[INFO] This challenge will perform a bunch of checks.
+[INFO] If you pass these checks, you will receive the /flag file.
+
+[TEST] You should have redirected my stdout to a file called myflag. Checking...
+
+[PASS] The file at the other end of my stdout looks okay!
+
+[TEST] You should have redirected my stderr to instructions. Checking...
+
+[PASS] The file at the other end of my stderr looks okay!
+[PASS] Success! You have satisfied all execution requirements.
+```
+
+## What I learned
+1. A File Descriptor (FD) is a number that describes a communication channel in Linux.
+    - FD 0: Standard Input
+    - FD 1: Standard Output
+    - FD 2: Standard Error
+2. `>` without a number implies `1>`.
+3.  We can redirect multiple file descriptors at the same time.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Redirecting errors module pages. (It was enough)
+
+
