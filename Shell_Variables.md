@@ -63,3 +63,25 @@ pwn.college{Agvw5Pjth--eC5_g_52orS7kS7Y.QX5UTN0wCO2kjNzEzW}
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Setting Variables module pages
+
+
+# Multi-word Variables
+Set the variable `PWN` to the value `COLLEGE YEAH`.
+
+## My solution
+**Flag:** `pwn.college{8RFizxWZ322TYCkAwioNGfSj2MA.QXwYTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now since i have to add multiple word value into variable, i need to use `""`.
+    ```bash
+    hacker@variables~multi-word-variables:~$ PWN="COLLEGE YEAH"
+    You've set the PWN variable properly! As promised, here is the flag:
+    pwn.college{8RFizxWZ322TYCkAwioNGfSj2MA.QXwYTN0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/variables/) to complete the challenge.
+
+## What I learned
+1. To add multi word value to variable we have to specify it under quotation marks.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Multi-word Variables module pages
