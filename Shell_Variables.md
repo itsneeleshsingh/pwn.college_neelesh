@@ -118,3 +118,45 @@ In this challenge we have to invoke `/challenge/run` with:
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Exporting Variables module pages
+
+
+# Printing Exported Variables
+Find the `FLAG` variable among exported environment variables.
+
+## My solution
+**Flag:** `pwn.college{Q1Naku2MAuqqkTaEfSxDA1FKoUh.QX4UTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now execute `env` to get list of all environment variables and find flag in it.
+    ```bash
+    hacker@variables~printing-exported-variables:~$ env
+    SHELL=/run/dojo/bin/bash
+    HOSTNAME=variables~printing-exported-variables
+    PWD=/home/hacker
+    MANPATH=/run/dojo/share/man:
+    DOJO_AUTH_TOKEN=109cd69edcd3d1d500f0f2ea92de18ff39d0f4bd617987220ca47145b08fc1dd
+    HOME=/home/hacker
+    LANG=C.UTF-8
+    FLAG=pwn.college{Q1Naku2MAuqqkTaEfSxDA1FKoUh.QX4UTN0wCO2kjNzEzW}
+    TERMINFO=/run/dojo/share/terminfo
+    TERM=xterm-256color
+    SHLVL=2
+    LC_CTYPE=C.UTF-8
+    SSL_CERT_FILE=/run/dojo/etc/ssl/certs/ca-bundle.crt
+    PATH=/run/challenge/bin:/run/dojo/bin:/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    DEBIAN_FRONTEND=noninteractive
+    _=/run/dojo/bin/env
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/variables/) to complete the challenge.
+
+Note: We can also use `grep` in this.
+```bash
+hacker@variables~printing-exported-variables:~$ env | grep pwn.college
+FLAG=pwn.college{Q1Naku2MAuqqkTaEfSxDA1FKoUh.QX4UTN0wCO2kjNzEzW}
+```
+
+## What I learned
+1. `env` is used to print all the environment variables stored at once.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Printing Exported Variables module pages
