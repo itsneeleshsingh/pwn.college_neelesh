@@ -188,3 +188,27 @@ Read the output of `/challenge/run` directly into a variable named `PWN` so it c
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Storing Command Output module pages
+
+
+# Reading Input
+Use `read` to set the `PWN` variable to `COLLEGE`.
+
+## My solution
+**Flag:** `pwn.college{41aQDNzL9paydQ31gVkrWXVF_EU.QX4cTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we have to input the `COLLEGE` value into `PWN` variable using `read`.
+    ```bash
+    hacker@variables~reading-input:~$ read -p "Enter:" PWN
+    Enter:COLLEGE
+    You've set the PWN variable properly! As promised, here is the flag:
+    pwn.college{41aQDNzL9paydQ31gVkrWXVF_EU.QX4cTN0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/variables/) to complete the challenge.
+
+## What I learned
+1. `read` reads from standard input into shell variables.
+2. `-p` argument, which lets you specify a prompt.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Reading Input module pages
