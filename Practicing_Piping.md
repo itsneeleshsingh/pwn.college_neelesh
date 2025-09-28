@@ -533,3 +533,32 @@ We can see that both show the same temporary location because we are not running
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Process substitution for input module pages.
+
+
+# Writing to multiple programs
+In this challenge we have to duplicate the output of `/challenge/hack` so that the same data is provided as stdin to both `/challenge/the` and `/challenge/planet`.
+
+## My solution
+**Flag:** `pwn.college{cZN9CvXICfoDyklnbgapZIXuWBq.QXwgDN1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now since output of `/challenge/hack` is to be splitted, so we will use `tee` and then stdin to both `/challenge/the` and `/challenge/planet` using `>(command)`.
+    ```bash
+    hacker@piping~writing-to-multiple-programs:~$ /challenge/hack | tee >(/challenge/the) >(/challenge/planet)
+    This secret data must directly and simultaneously make it to /challenge/the and
+    /challenge/planet. Don't try to copy-paste it; it changes too fast.
+    26698261992715112645
+    Congratulations, you have duplicated data into the input of two programs! Here
+    is your flag:
+    pwn.college{cZN9CvXICfoDyklnbgapZIXuWBq.QXwgDN1wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+## What I learned
+1. `>(command)` is output process substitution.
+2. Combining `tee` with `>(...)` lets us duplicate out one stream to multiple commands.
+3. `tee` is designed to write to files and to standard output.
+4. `echo hi | rev` and `echo hi > >(rev)` gives same output.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Writing to multiple programs module pages.
