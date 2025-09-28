@@ -605,3 +605,54 @@ pwn.college{09HdR-gVxUUDpv_XG_K6osTsZxs.QXxQDM2wCO2kjNzEzW}
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Split-piping stderr and stdout module pages.
+
+
+# Named pipes
+In this challenge we have to create a FIFO at `/tmp/flag_fifo` and redirect the stdout of `/challenge/run` into it so the flag is written into the FIFO.
+
+## My solution
+**Flag:** `pwn.college{cwULVABO8BJBQ4uO6Mn1WAJ2K2S.01MzMDOxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we have to create a FIFO at `/tmp/flag_fifo`.
+    ```bash
+    hacker@piping~named-pipes:~$ mkfifo /tmp/flag_fifo
+    hacker@piping~named-pipes:~$
+    ```
+3. then redirect the stdout of `/challenge/run` into it.
+    ```bash
+    hacker@piping~named-pipes:~$ /challenge/run > /tmp/flag_fifo
+    You're successfully redirecting /challenge/run to a FIFO at /tmp/flag_fifo!
+    Bash will now try to open the FIFO for writing, to pass it as the stdout of
+    /challenge/run. Recall that operations on FIFOs will *block* until both the
+    read side and the write side is open, so /challenge/run will not actually be
+    launched until you start reading from the FIFO!
+    ```
+4. Then open another terminal and read it.
+    ```bash
+    hacker@piping~named-pipes:~$ cat /tmp/flag_fifo
+    You've correctly redirected /challenge/run's stdout to a FIFO at
+    /tmp/flag_fifo! Here is your flag:
+    pwn.college{cwULVABO8BJBQ4uO6Mn1WAJ2K2S.01MzMDOxwCO2kjNzEzW}
+    ```
+5.  I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+Note here `p` at the beginning of the permissions - that indicates it's a pipe.
+```bash
+hacker@piping~named-pipes:~$ ls -l /tmp/flag_fifo
+prw-r--r-- 1 hacker hacker 0 Sep 28 13:36 /tmp/flag_fifo
+```
+
+## What I learned
+1. We can create our own persistent named pipes that stick around on the filesystem. These are called FIFOs[First (byte) In, First (byte) Out].
+2. We can control where FIFOs are created
+and they persist until we delete them.
+3. FIFO block any operations until both the read side of the pipe and the write side of the pipe are ready.
+4. Benefits of FIFO - 
+    - No disk storage
+    - Ephemeral data(Once data is read from a FIFO, it's gone)
+    - Automatic synchronization
+    - Complex data flows
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Named pipes module pages.
