@@ -562,3 +562,46 @@ In this challenge we have to duplicate the output of `/challenge/hack` so that t
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Writing to multiple programs module pages.
+
+
+# Split-piping stderr and stdout
+In this challenge we have to run `/challenge/hack` so that:
+- stdout from `/challenge/hack` is fed into `/challenge/planet`.
+- stderr from `/challenge/hack` is fed into `/challenge/the`.
+
+## My solution
+**Flag:** `pwn.college{09HdR-gVxUUDpv_XG_K6osTsZxs.QXxQDM2wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now `/challenge/hack` runs and produces two streams - `> >( /challenge/planet )` and `2> >( /challenge/the )` that is, It redirects stderr into the stdin of a running `/challenge/the`.
+    ```bash
+    hacker@piping~split-piping-stderr-and-stdout:~$ /challenge/hack > >(/challenge/planet) 2> >(/challenge/the)
+    Congratulations, you have learned a redirection technique that even experts
+    struggle with! Here is your flag:
+    pwn.college{09HdR-gVxUUDpv_XG_K6osTsZxs.QXxQDM2wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+Note: We can also geet what it is sending to output.
+```bash
+hacker@piping~split-piping-stderr-and-stdout:~$ /challenge/hack \
+  > >( tee /tmp/planet_capture | /challenge/planet ) \
+  2> >( tee /tmp/the_capture   | /challenge/the )
+Congratulations, you have learned a redirection technique that even experts
+struggle with! Here is your flag:
+pwn.college{09HdR-gVxUUDpv_XG_K6osTsZxs.QXxQDM2wCO2kjNzEzW}
+hacker@piping~split-piping-stderr-and-stdout:~$ cat /tmp/planet_capture
+This secret data must directly make it to /challenge/planet over my stdout.
+Don't try to copy-paste it; it changes too fast.
+1351926211450821202
+Congratulations, you have learned a redirection technique that even experts
+struggle with! Here is your flag:
+pwn.college{09HdR-gVxUUDpv_XG_K6osTsZxs.QXxQDM2wCO2kjNzEzW}
+```
+
+## What I learned
+1. Process substitution `>(any command)` lets us treat a command as a writable temporary file that feeds that commands stdin.
+2. Redirecting `>` and `2>` (in this case) to separate process substitutions enables splitting streams to different operations without mixing.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Split-piping stderr and stdout module pages.
