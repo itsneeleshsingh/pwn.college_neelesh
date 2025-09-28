@@ -211,4 +211,27 @@ Use `read` to set the `PWN` variable to `COLLEGE`.
 2. `-p` argument, which lets you specify a prompt.
 
 ## References 
-- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Reading Input module pages
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Reading Input module pages.
+
+
+# Reading Files
+The challenge asks us to read the contents of `/challenge/read_me` directly into a variable called `PWN`. Unlike earlier where we used $(cat file) to capture file contents, this time we learn a cleaner way using the read builtin with input redirection `<`.
+
+## My solution
+**Flag:** `pwn.college{Qcpd-KDHo_fbQ6RsJJuYuJE49Gn.QXwIDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will input the `/challenge/read_me` as input into the `PWN`.
+    ```bash
+    hacker@variables~reading-files:~$ read PWN < /challenge/read_me
+    You've set the PWN variable properly! As promised, here is the flag:
+    pwn.college{Qcpd-KDHo_fbQ6RsJJuYuJE49Gn.QXwIDO0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/variables/) to complete the challenge.
+
+## What I learned
+1. Files can be read directly into variables using the `<` operator without needing external tools like `cat`.
+2. Both the variable name PWN and the expected value COLLEGE are case-sensitive.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Reading Files module pages.
