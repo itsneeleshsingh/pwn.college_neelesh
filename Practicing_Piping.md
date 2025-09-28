@@ -443,3 +443,54 @@ pwn.college{EDykzEbxNZ42w0ESytFEusOxjoDECOY0OTz.2hNGCWZbFrz}
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Filtering with grep -v module pages.
 
 
+# Duplicating piped data with tee
+This challenge teaches the `tee` command that duplicates a stream coming through a pipe for writing it to one or more files. In this challenge `/challenge/pwn` must be piped into `/challenge/college`, but we have to intercept the data flowing from `/challenge/pwn` so you can inspect it (to figure out what `/challenge/college` expects) before it reaches `/challenge/college`.
+
+## My solution
+**Flag:** `pwn.college{cU2dGHZb_5re9sZq0Evd7iC2vX0.QXxITO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now since we have to give output of `/challenge/pwn` into `/challenge/college`, we will use pipe. But we also have to test what conitions the `/challenge/pwn` demand using `tee` and save into any file let say `log`.
+    ```bash
+    hacker@piping~duplicating-piped-data-with-tee:~$ /challenge/pwn | tee log | /challenge/college
+    Processing...
+    The input to 'college' does not contain the correct secret code! This code
+    should be provided by the 'pwn' command. HINT: use 'tee' to intercept the
+    output of 'pwn' and figure out what the code needs to be.
+    ```
+3. Now we can see our log file and we will read it.
+    ```bash
+    hacker@piping~duplicating-piped-data-with-tee:~$ ls
+    COLLEGE  Desktop  PWN  instructions  leap  log  myflag  not-the-flag  t  the-flag
+    hacker@piping~duplicating-piped-data-with-tee:~$ cat log
+    Usage: /challenge/pwn --secret [SECRET_ARG]
+
+    SECRET_ARG should be "cU2dGHZb"
+    ```
+4. Now we got to know that `/challenge/pwn` needs the secret key.
+    ```bash
+    hacker@piping~duplicating-piped-data-with-tee:~$ /challenge/pwn --secret cU2dGHZb | /challenge/col
+    lege
+    Processing...
+    Correct! Passing secret value to /challenge/college...
+    Great job! Here is your flag:
+    pwn.college{cU2dGHZb_5re9sZq0Evd7iC2vX0.QXxITO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+**My mistake:** After secret key i directly executed the `/challenge/pwn` without passing it to `/challenge/college`.
+```bash
+hacker@piping~duplicating-piped-data-with-tee:~$ /challenge/pwn --secret cU2dGHZb
+Processing...
+You must pipe the output of /challenge/pwn into /challenge/college (or 'tee'
+for debugging).
+```
+
+## What I learned
+1. The `tee` command(T-splitter) duplicates data flowing through our pipes to any number of files provided on the command line.
+2. `tee` duplicates the piped stream so we can both inspect and forward data in a pipeline.
+3. After some research i also got to know - that `tee -a` appends instead of truncating
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Duplicating piped data with tee module pages.
+- Google for random searching.
