@@ -85,3 +85,36 @@ Set the variable `PWN` to the value `COLLEGE YEAH`.
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Multi-word Variables module pages
+
+
+# Exporting Variables
+In this challenge we have to invoke `/challenge/run` with:
+- `PWN` exported and set to `COLLEGE`
+- `COLLEGE` set to `PWN` in the current shell but not exported.
+
+## My solution
+**Flag:** `pwn.college{g_uUPqCumCPXKV_gzgnFyua2BKM.QXyYTN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we create the variable `PWN` and value as `COLLEGE` and export it.
+    ```bash
+    hacker@variables~exporting-variables:~$ PWN=COLLEGE
+    You've set the PWN variable to the proper value!
+    hacker@variables~exporting-variables:~$ export PWN
+    You've set the PWN variable to the proper value!
+    You've set the COLLEGE variable to the proper value!
+    ```
+3. Now set `COLLEGE` variable and value to `PWN` but we do not have to export it.
+    ```bash
+    hacker@variables~exporting-variables:~$ export PWN
+    You've set the PWN variable to the proper value!
+    You've set the COLLEGE variable to the proper value!
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/variables/) to complete the challenge.
+
+## What I learned
+1. Assignment without export keeps the variable local to the current shell.
+2. export NAME=value makes NAME visible to child processes that is - it adds it to environment variables.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Exporting Variables module pages
