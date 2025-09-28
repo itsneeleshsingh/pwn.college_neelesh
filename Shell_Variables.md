@@ -160,3 +160,31 @@ FLAG=pwn.college{Q1Naku2MAuqqkTaEfSxDA1FKoUh.QX4UTN0wCO2kjNzEzW}
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Printing Exported Variables module pages
+
+
+# Storing Command Output
+Read the output of `/challenge/run` directly into a variable named `PWN` so it contains the flag.
+
+## My solution
+**Flag:** `pwn.college{8uc63JGF7ZleaKJmhCJhFFd2Y_t.QX1cDN1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now first we will run the ecommand `/challenge/run` and store it in `PWN` variable.
+    ```bash
+    hacker@variables~storing-command-output:~$ PWN=$(/challenge/run)
+    Congratulations! You have read the flag into the PWN variable. Now print it out
+    and submit it!
+    ```
+3. Now print the value stored in the variable.
+    ```bash
+    hacker@variables~storing-command-output:~$ echo $PWN
+    pwn.college{8uc63JGF7ZleaKJmhCJhFFd2Y_t.QX1cDN1wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/variables/) to complete the challenge.
+
+## What I learned
+1. Command Substitution is used to store the output of some command into a variable.
+2. Use $(...) over `...` for command substitution. 
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/variables/) - Shell Variables / Storing Command Output module pages
