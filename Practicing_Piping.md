@@ -494,3 +494,42 @@ for debugging).
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Duplicating piped data with tee module pages.
 - Google for random searching.
+
+
+# Process substitution for input
+This challenge teaches us that `<(command)` runs command and replaces that token with a filename. In this challenge We have to use `diff` command with process substitution in two commands - `/challenge/print_decoys`, which will print a bunch of decoy flags, and `/challenge/print_decoys_and_flag` which will print those same decoys plus the real flag.
+
+## My solution
+**Flag:** `pwn.college{Q38SyuAsjDFUFuB07vZmlCPLm7n.0lNwMDOxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Left argument of` /challenge/print_decoys` (decoys only) with right argument output of `/challenge/print_decoys_and_flag` (decoys + real flag). We will use `diff` function with `<(command)` to get the flag.
+    ```bash
+    hacker@piping~process-substitution-for-input:~$ diff <(/challenge/print_decoys) <(/challenge/print_decoys_and_flag)
+    51a52
+    > pwn.college{Q38SyuAsjDFUFuB07vZmlCPLm7n.0lNwMDOxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/piping/) to complete the challenge.
+
+Now if i try to run where they are temporary being stored using `echo` command.
+```bash
+hacker@piping~process-substitution-for-input:~$ echo <(/challenge/print_decoys) <(/challenge/print_decoys_and_flag)
+/dev/fd/63 /dev/fd/62
+```
+Now if i run this command individually for both.
+```bash
+> pwn.college{Q38SyuAsjDFUFuB07vZmlCPLm7n.0lNwMDOxwCO2kjNzEzW}
+hacker@piping~process-substitution-for-input:~$ echo <(/challenge/print_decoys)
+/dev/fd/63
+hacker@piping~process-substitution-for-input:~$ echo  <(/challenge/print_decoys_and_flag)
+/dev/fd/63
+```
+We can see that both show the same temporary location because we are not running it simultaneously.
+
+## What I learned
+1. How `<(command)` creates a filename representing a running commands standard output.
+2. How to use `diff` on outputs of commands without temp files or storing/redirecting it to the files.
+3. Where they are stored as temporary file and how to see it using `echo` command.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/piping/) - Practicing Piping / Process substitution for input module pages.
