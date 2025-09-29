@@ -397,3 +397,34 @@ In this challenge, we have to start a process directly in the background without
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Starting Backgrounded Processes module pages.
+
+
+# Process Exit Codes
+In this challenge, `/challenge/get-code` produces a hidden exit code. We then need to use that code as input to `/challenge/submit-code` to retrieve the flag.
+
+## My solution
+**Flag:** `pwn.college{UGrACFvhLB2YMexoQsBSinbkcHD.QX5YDO1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now run `/challenge/get-code` and get the value of the exit code using `echo $?`.
+    ```bash
+    hacker@processes~process-exit-codes:~$ /challenge/get-code
+    Exiting with an error code!
+    hacker@processes~process-exit-codes:~$ echo $?
+    254
+    ```
+3. Now we will submit code 254 as argument to `/challenge/submit-code`.
+    ```bash
+    hacker@processes~process-exit-codes:~$ /challenge/submit-code 254
+    CORRECT! Here is your flag:
+    pwn.college{UGrACFvhLB2YMexoQsBSinbkcHD.QX5YDO1wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. Every program exits with an exit code when it finishes running and terminates. 
+2. We can access the exit code of the most recently terminated command using the special `?` variable with `$` prepend to it to read its value.
+3. Commands that succeed typically return `0` and commands that fail typically return a non-zero value, most commonly `1`.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Process Exit Codes module pages.
