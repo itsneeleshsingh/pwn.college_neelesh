@@ -36,3 +36,34 @@ pwn.college{0kpsifytwgxduyo21u0rahjpsxr.01mxeznxwco2kjnzezw}
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Translating characters module pages.
+
+
+# Deleting characters
+In this challenge the program `/challenge/run` prints the flag but intersperses decoy characters (`^` and `%`) among the real characters. So we havee to use `tr -d` to remove those decoys and reveal the flag.
+
+## My solution
+**Flag:** `pwn.college{MD32r-z7BW21OMmovCtnWovwn1W.0FNxEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will first pipe `/challenge/run` and then use `tr -d` to delete some decoys from the flag.
+    ```bash
+    hacker@data~deleting-characters:~$ /challenge/run | tr -d %^
+    Your character-stuffed flag:
+    pwn.college{MD32r-z7BW21OMmovCtnWovwn1W.0FNxEzNxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/data/) to complete the challenge.
+
+**Note:** If you will give space between the characters to delete it will show error.
+```bash
+hacker@data~deleting-characters:~$ /challenge/run | tr -d % ^
+tr: extra operand ‘^’
+Only one string may be given when deleting without squeezing repeats.
+Try 'tr --help' for more information.
+```
+
+## What I learned
+1. `tr -d` deletes every occurrence of the characters specified.
+2. We can provide characters to delete all without spaces.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Deleting characters module pages.
