@@ -67,3 +67,26 @@ Try 'tr --help' for more information.
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Deleting characters module pages.
+
+
+# Deleting newlines
+The challenge here is about handling streams of text that contain unwanted newline characters `\n`. The challenge is to use the `tr` command with the `-d` flag to delete all newline characters from the flags output so that it becomes a single continuous string.
+
+## My solution
+**Flag:** `pwn.college{g4Czz_-Ug1eO6YdX8ohTZRAKSVR.0VNxEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will use `tr -d` to remove newline characters `\n`.
+    ```bash
+    hacker@data~deleting-newlines:~$ /challenge/run | tr -d "\n"
+    Your line-split flag: pwn.college{g4Czz_-Ug1eO6YdX8ohTZRAKSVR.0VNxEzNxwCO2kjNzEzW}hacker@data~deleting-newlines:~$
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/data/) to complete the challenge.
+
+## What I learned
+1. If quotes were not used, the shell itself would misinterpret it instead of passing it to `tr`.
+2. `\n` cannot be typed directly into the terminal because pressing Enter will execute the command. Tha is why we must use the escape sequence "\n" inside quotes.
+3. Using `tr -d` lets us strip away characters we dont want.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Deleting newlines module pages.
