@@ -82,3 +82,29 @@ In this level `/challenge/run` refuses to execute while `/challenge/dont_run` is
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Killing Processes module pages.
+
+
+# Interrupting Processes
+This challenge requires us to interrupt `/challenge/run`. `/challenge/run` will refuse to give you the flag until we interrupt it with Ctrl-C.
+
+## My solution
+**Flag:** `pwn.college{kBR4TU-SfKky1ML4O1ZS5SJtXR7.QXzQDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So we have to execute `/challenge/run` and then press ctrl+C to interrupt the process that gives us the flag.
+    ```bash
+    hacker@processes~interrupting-processes:~$ /challenge/run
+    I could give you the flag... but I won't, until this process exits. Remember,
+    you can force me to exit with Ctrl-C. Try it now!
+    ^C
+    Good job! You have used Ctrl-C to interrupt this process! Here is your flag:
+    pwn.college{kBR4TU-SfKky1ML4O1ZS5SJtXR7.QXzQDO0wCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. The Ctrl key and pressing C sends an interrupt to whatever application is waiting on input from the terminal and this causes the application to exit.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Interrupting Processes module pages.
+
