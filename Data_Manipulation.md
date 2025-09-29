@@ -90,3 +90,27 @@ The challenge here is about handling streams of text that contain unwanted newli
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Deleting newlines module pages.
+
+
+# Extracting the first lines with head
+In this challenge `/challenge/pwn` prints a lot of data. We have to take the first 7 lines of its output and pipe them into `/challenge/college` that will return the flag.
+
+## My solution
+**Flag:** `pwn.college{UVpSW8_MNDW4XDCZHVJpn0SIikk.0lNxEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will pipe `/challenge/pwn` then use `head -n 7` to print first 7 files and redirect again it sdout to `/challenge/college` to get flag.
+    ```bash
+    hacker@data~extracting-the-first-lines-with-head:~$ /challenge/pwn | head -n 7 | /challenge/college
+    Congratulations, you piped the right codes!
+    pwn.college{UVpSW8_MNDW4XDCZHVJpn0SIikk.0lNxEzNxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/data/) to complete the challenge.
+
+## What I learned
+1. The `head` command is used to display the first few lines of its input.
+2. We can control how many lines to be printed using `-n` argument and then writing that number after that as second argument.
+3. By default, it shows the first 10 lines.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Extracting the first lines with head module pages.
