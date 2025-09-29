@@ -368,3 +368,32 @@ The challenge asks us to bring a backgrounded process back into the foreground u
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Foregrounding Processes module pages.
+
+
+# Starting Backgrounded Processes
+In this challenge, we have to start a process directly in the background without suspending it first.
+
+## My solution
+**Flag:** `pwn.college{Ip02W_JE9RZFM6fIAGwDJ0wI9iY.QX5QDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. So we can directly make the program run in background using `&`.
+    ```bash
+    hacker@processes~starting-backgrounded-processes:~$
+
+
+    Yay, you started me in the background! Because of that, this text will probably
+    overlap weirdly with the shell prompt, but you're used to that by now...
+
+    Anyways! Here is your flag!
+    pwn.college{Ip02W_JE9RZFM6fIAGwDJ0wI9iY.QX5QDO0wCO2kjNzEzW}
+
+    [1]+  Done                    /challenge/run
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. Starting with `&` - directly launches process in the background.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Starting Backgrounded Processes module pages.
