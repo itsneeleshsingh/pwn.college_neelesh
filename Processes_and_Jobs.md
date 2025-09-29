@@ -163,8 +163,57 @@ In this challenge a decoy process `/challenge/decoy` is holding open a named pip
 7. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
 
 ## What I learned
-1. Lerned to use kill and list processes.
+1. Learned to use kill and list processes.
 2. How FIFOs buffer data killing a process does not remove data already in the pipe.
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Killing Misbehaving Processes module pages.
+
+
+# Suspending Processes
+This challenge requires us to launch `/challenge/run`, suspend it, then launch another copy while the first is suspended (the program wants to see another copy sharing the same terminal).
+
+## My solution
+**Flag:** `pwn.college{ATbMjL25KDbBV7L0FoP0B2QakOQ.QX1QDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will first execute `/challenge/run` and then suspend it using ctrl+z.
+    ```bash
+    hacker@processes~suspending-processes:~$ /challenge/run
+    I'll only give you the flag if there's already another copy of me running in
+    this terminal... Let's check!
+
+    UID          PID    PPID  C STIME TTY          TIME CMD
+    root         138     129  0 14:36 pts/0    00:00:00 bash /challenge/run
+    root         140     138  0 14:36 pts/0    00:00:00 ps -f
+
+    I don't see a second me!
+
+    To pass this level, you need to suspend me and launch me again! You can
+    background me with Ctrl-Z or, if you're not ready to do that for whatever
+    reason, just hit Enter and I'll exit!
+    ^Z
+    [1]+  Stopped                 /challenge/run
+    ```
+3. Now we will again execute it to get our flag.
+    ```bash
+    hacker@processes~suspending-processes:~$ /challenge/run
+    I'll only give you the flag if there's already another copy of me running in
+    this terminal... Let's check!
+
+    UID          PID    PPID  C STIME TTY          TIME CMD
+    root         138     129  0 14:36 pts/0    00:00:00 bash /challenge/run
+    root         145     129  0 14:36 pts/0    00:00:00 bash /challenge/run
+    root         147     145  0 14:36 pts/0    00:00:00 ps -f
+
+    Yay, I found another version of me! Here is the flag:
+    pwn.college{ATbMjL25KDbBV7L0FoP0B2QakOQ.QX1QDO0wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. We can suspend a running process with Ctrl-Z.
+2. We can also resume those suspended processes.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Suspending Processes module pages.
