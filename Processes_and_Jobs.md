@@ -317,3 +317,54 @@ The challenge asks us to understand how to move a suspended process into the bac
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Backgrounding Processes module pages.
+
+
+# Foregrounding Processes
+The challenge asks us to bring a backgrounded process back into the foreground using the `fg` command. This is similar to how we resume suspended processes, but here we are working with jobs that were already running in the background.
+
+## My solution
+**Flag:** `pwn.college{ciA37v080UPACwli35TizXEsY4m.QX4QDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we have to first run the program and suspend it.
+    ```bash
+    hacker@processes~foregrounding-processes:~$ /challenge/run
+    To pass this level, you need to suspend me, resume the suspended process in the
+    background, and *then* foreground it without re-suspending it! You can
+    background me with Ctrl-Z (and resume me in the background with 'bg') or, if
+    you're not ready to do that for whatever reason, just hit Enter and I'll exit!
+    ^Z
+    [1]+  Stopped                 /challenge/run
+    ```
+3. Now we have to make it as background process.
+    ```bash
+    hacker@processes~foregrounding-processes:~$ bg
+    [1]+ /challenge/run &
+    hacker@processes~foregrounding-processes:~$
+
+
+    Yay, I'm now running the background! Because of that, this text will probably
+    overlap weirdly with the shell prompt. Don't panic; just hit Enter a few times
+    to scroll this text out. After that, resume me into the foreground with 'fg';
+    I'll wait.
+
+    hacker@processes~foregrounding-processes:~$ 
+    ```
+4. Now make it foreground using `fg` and then click enter to get the flag.
+    ```bash
+    hacker@processes~foregrounding-processes:~$ fg
+    /challenge/run
+    YES! Great job! I'm now running in the foreground. Hit Enter for your flag!
+
+    pwn.college{ciA37v080UPACwli35TizXEsY4m.QX4QDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. Difference between bg and fg
+    - bg: lets the process continue running in the background.
+    - fg: brings it back to the foreground so we can interact with it directly.
+2. With suspend (Ctrl+Z), background (bg), and foreground (fg), we have full control over how processes use the terminal.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Foregrounding Processes module pages.
