@@ -114,3 +114,29 @@ In this challenge `/challenge/pwn` prints a lot of data. We have to take the fir
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Extracting the first lines with head module pages.
+
+
+# Extracting specific sections of text
+The challenge introduces the `cut` command, which allows us to extract specific fields of text when data is arranged in a structured way.
+So `/challenge/run` outputs multiple columns on each line, where one column contains the actual flag characters and other columns are just random numbers. The task is to extract only the flag characters using `cut` and then remove the newline characters using `tr -d "\n"`, so that the flag forms a single continuous string.
+
+## My solution
+**Flag:** `pwn.college{MgcLF009ReCR-fhDOQGi1nfuS07.01NxEzNxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. I used `cut` to extract just the second column `-f 2`, specifying space " " as the delimiter. Finally, I piped the extracted characters to `tr -d "\n"` to join them into one line that gave us the flag.
+    ```bash
+    hacker@data~extracting-specific-sections-of-text:~$ /challenge/run | cut -d " " -f 2 | tr -d "\n"
+    pwn.college{MgcLF009ReCR-fhDOQGi1nfuS07.01NxEzNxwCO2kjNzEzW}hacker@data~extracting-specific-sections-of-text:~$
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/data/) to complete the challenge.
+
+## What I learned
+1. Extracting columns with cut
+    - `-d` lets us specify the separator character(delimiter).
+    - `-f` lets you choose which column to display.
+2. Combining tools with pipes and by chaining `cut` and `tr`, we can solve complex text processing problems quickly.
+2. Importance of `tr -d "\n"`.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Extracting specific sections of text module pages.
