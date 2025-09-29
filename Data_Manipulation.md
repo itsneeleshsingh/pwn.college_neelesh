@@ -131,12 +131,50 @@ So `/challenge/run` outputs multiple columns on each line, where one column cont
     ```
 3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/data/) to complete the challenge.
 
+I also tried to run the `/challenge/run` and it was coorect that second row contains the flag.
+
 ## What I learned
 1. Extracting columns with cut
     - `-d` lets us specify the separator character(delimiter).
     - `-f` lets you choose which column to display.
 2. Combining tools with pipes and by chaining `cut` and `tr`, we can solve complex text processing problems quickly.
-2. Importance of `tr -d "\n"`.
+3. Importance of `tr -d "\n"`.
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Extracting specific sections of text module pages.
+
+
+# Sorting data
+The challenge gives a file `/challenge/flags.txt` containing 100 fake flags and one real flag mixed together. The challenge prepared the fakes so that when the file is sorted alphabetically, the real flag sorts to the very end. We have to sort the file and extract the last line.
+
+## My solution
+**Flag:** `pwn.college{0zQeJN9aDWjFCwNv1IyXjDand0e.0FM0MDOxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will sort the file using `sort` command.
+    ```bash
+    hacker@data~sorting-data:~$ sort /challenge/flags.txt
+    ovm.bnlldge{0zQeIM9aDViFCwNv0IyXjCamd0e.0FM0MDOxwBO2kjNzEzW}
+    (and so on.....)
+    pwn.college{0zQeJN9aDWjFCwNv1IxXjDamd0e.0EM0MDOxwCN2jjMzDzW}
+    pwn.college{0zQeJN9aDWjFCwNv1IyXjDand0e.0FM0MDOxwCO2kjNzEzW}
+    pwn.college{0zQeJN9aDWjFCwNv1IyXjDand0e.0FM0MDOxwCO2kjNzEzW}
+    ```
+3. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/data/) to complete the challenge.
+
+Or easy method to do was to reverse the sorted output using `-r` argument.
+```bash
+hacker@data~sorting-data:~$ sort /challenge/flags.txt -r
+pwn.college{0zQeJN9aDWjFCwNv1IyXjDand0e.0FM0MDOxwCO2kjNzEzW}
+pwn.college{0zQeJN9aDWjFCwNv1IyXjDand0e.0FM0MDOxwCO2kjNzEzW}
+```
+
+## What I learned
+1. `sort` orders lines alphabetically
+    - `-r`: reverse order (Z to A)
+    - `-n`: numeric sort (for numbers)
+    - `-u`: unique lines only (remove duplicates)
+    - `-R`: random order!
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/data/) - Data Manipulation / Sorting data module pages.
