@@ -217,3 +217,40 @@ This challenge requires us to launch `/challenge/run`, suspend it, then launch a
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Suspending Processes module pages.
+
+
+# Resuming Processes
+The challenge requires us to suspend a running process and then resume it back into the foreground.
+
+## My solution
+**Flag:** `pwn.college{4rqWJdPSf-1XtOvgrXidFU7p1hd.QX2QDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now first we will run the program and then suspend it.
+    ```bash
+    hacker@processes~resuming-processes:~$ /challenge/run
+    Let's practice resuming processes! Suspend me with Ctrl-Z, then resume me with
+    the 'fg' command! Or just press Enter to quit me!
+    ^Z
+    [1]+  Stopped                 /challenge/run
+    ```
+3. then we will again resume the program to get our flag.
+    ```bash
+    hacker@processes~resuming-processes:~$ fg
+    /challenge/run
+    I'm back! Here's your flag:
+    pwn.college{4rqWJdPSf-1XtOvgrXidFU7p1hd.QX2QDO0wCO2kjNzEzW}
+    Don't forget to press Enter to quit me!
+
+    Goodbye!
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. Suspending and resuming processes in Linux
+    - Ctrl+C kills a process, but Ctrl+Z only pauses it, allowing us to resume later.
+    - This is useful when we want temporary control of our shell back without terminating the running program.
+2. fg (foreground) resumes the most recent suspended job.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Resuming Processes module pages.
