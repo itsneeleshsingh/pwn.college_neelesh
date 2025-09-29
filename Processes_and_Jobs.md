@@ -254,3 +254,66 @@ The challenge requires us to suspend a running process and then resume it back i
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Resuming Processes module pages.
+
+
+# Backgrounding Processes
+The challenge asks us to understand how to move a suspended process into the background using the `bg` command. This allows a program to keep running while still giving us back the shell to run other commands.
+
+## My solution
+**Flag:** `pwn.college{UeCd0hnGaFSRhjzSgWW-tQzS_E1.QX3QDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now first we will execute run program and then suspend it using ctrl+z.
+    ```bash
+    hacker@processes~backgrounding-processes:~$ /challenge/run
+    I'll only give you the flag if there's already another copy of me running *and
+    not suspended* in this terminal... Let's check!
+
+    UID          PID STAT CMD
+    root         153 S+   bash /challenge/run
+    root         155 R+   ps -o user=UID,pid,stat,cmd
+
+    I don't see a second me!
+
+    To pass this level, you need to suspend me, resume the suspended process in the
+    background, and then launch a new version of me! You can background me with
+    Ctrl-Z (and resume me in the background with 'bg') or, if you're not ready to
+    do that for whatever reason, just hit Enter and I'll exit!
+    ^Z
+    [1]+  Stopped                 /challenge/run
+    ```
+3. Then we will background the proccess with `bg`.
+    ```bash
+    hacker@processes~backgrounding-processes:~$ bg
+    [1]+ /challenge/run &
+    hacker@processes~backgrounding-processes:~$
+
+
+    Yay, I'm now running the background! Because of that, this text will probably
+    overlap weirdly with the shell prompt. Don't panic; just hit Enter a few times
+    to scroll this text out.
+    ```
+4. Now we will again run the program to get our flag.
+    ```bash
+    hacker@processes~backgrounding-processes:~$ /challenge/run
+    I'll only give you the flag if there's already another copy of me running *and
+    not suspended* in this terminal... Let's check!
+
+    UID          PID STAT CMD
+    root         153 S    bash /challenge/run
+    root         163 S    sleep 6h
+    root         164 S+   bash /challenge/run
+    root         166 R+   ps -o user=UID,pid,stat,cmd
+
+    Yay, I found another version of me running in the background! Here is the flag:
+    pwn.college{UeCd0hnGaFSRhjzSgWW-tQzS_E1.QX3QDO0wCO2kjNzEzW}
+    ```
+5. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. Difference between suspended and background processes
+    - Suspended: paused that is not executing (STAT = T).
+    - Backgrounded: running in background and not blocking the shell (STAT = S)
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Backgrounding Processes module pages.
