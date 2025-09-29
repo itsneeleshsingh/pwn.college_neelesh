@@ -108,3 +108,63 @@ This challenge requires us to interrupt `/challenge/run`. `/challenge/run` will 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Interrupting Processes module pages.
 
+
+# Killing Misbehaving Processes
+In this challenge a decoy process `/challenge/decoy` is holding open a named pipe (FIFO) at `/tmp/flag_fifo`. That prevents `/challenge/run` from writing the flag cleanly into the FIFO. So we have to find and kill the decoy process, then run `/challenge/run` so it can write the flag into `/tmp/flag_fifo`.
+
+## My solution
+**Flag:** `pwn.college{86EAtJN8iODKOvt1RLu1h3OyfIX.0FNzMDOxwCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now will first see the processes and find the one with `/challenge/decoy` path.
+    ```bash
+    hacker@processes~killing-misbehaving-processes:~$ ps aux
+    USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+    root           1  0.0  0.0   1056   640 ?        Ss   13:38   0:00 /sbin/docker-init -- /nix/var/n
+    root           7  0.0  0.0 231708  2560 ?        S    13:38   0:00 /run/dojo/bin/sleep 6h
+    root         137  0.0  0.0   4132  1280 ?        S    13:38   0:00 /bin/bash /challenge/.init
+    root         138  0.0  0.0   4132  1280 ?        S    13:38   0:00 /bin/bash /challenge/.init
+    root         139  0.0  0.0   5204  3520 ?        S    13:38   0:00 su -c exec /challenge/decoy > /
+    root         140  0.0  0.0   2744  1280 ?        S    13:38   0:00 sleep 6h
+    root         141  0.0  0.0   2744  1600 ?        S    13:38   0:00 sleep 6h
+    hacker       142  0.0  0.0  13516  9280 ?        Ss   13:38   0:00 /usr/bin/python /challenge/deco
+    hacker       144  0.0  0.0 231576  3520 pts/0    Ss   13:38   0:00 /nix/store/0nxvi9r5ymdlr2p24rjj
+    hacker       150  0.0  0.0 231972  4160 pts/0    S    13:38   0:00 /run/dojo/bin/bash --login
+    hacker       167  0.0  0.0 231576  3520 pts/1    Ss   14:02   0:00 /nix/store/0nxvi9r5ymdlr2p24rjj
+    hacker       173  0.0  0.0 231972  4160 pts/1    S+   14:02   0:00 /run/dojo/bin/bash --login
+    hacker       190  0.0  0.0 233600  3840 pts/0    R+   14:07   0:00 ps aux
+    ```
+3. Now we will kill the 142 process.
+    ```bash
+    hacker@processes~killing-misbehaving-processes:~$ kill 142
+    hacker@processes~killing-misbehaving-processes:~$
+    ```
+4. Now execute the `/challenge/run`.
+    ```bash
+    hacker@processes~killing-misbehaving-processes:~$ /challenge/run
+    Sending the flag to /tmp/flag_fifo!
+    ```
+5. Now open another terminal and try to read the flag.
+    ```bash
+    hacker@processes~killing-misbehaving-processes:~$ cat /tmp/flag_fifo
+    pwn.college{E9nSj7c5EvFb1RBXDT9B9QTVxbkCHoj0kO9q0H3g9Sb5c-b}
+    pwn.college{-g6Yz9HNx6tEPWmEJHi9lJenmKgiOwPK.8nqxw3y5Oir.ta}
+    pwn.college{yYhwrreDRrrwCOxMpXwrUPxYwZ6uwO8iF44anR1a.DQwM1p}
+    (and so on..........)
+    ```
+6. These are some random flags that was buffered through pipes. For that we will again execute `/challenge/run` in and on another terminal again catch it.
+    ```bash
+    hacker@processes~killing-misbehaving-processes:~$ /challenge/run
+    Sending the flag to /tmp/flag_fifo!
+
+    hacker@processes~killing-misbehaving-processes:~$ cat /tmp/flag_fifo
+    pwn.college{86EAtJN8iODKOvt1RLu1h3OyfIX.0FNzMDOxwCO2kjNzEzW}
+    ```
+7. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. Lerned to use kill and list processes.
+2. How FIFOs buffer data killing a process does not remove data already in the pipe.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Killing Misbehaving Processes module pages.
