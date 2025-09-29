@@ -42,3 +42,43 @@ The challenge hides the `/challenge/run` by renaming it and preventing us from l
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Listing Processes module pages.
+
+
+# Killing Processes
+In this level `/challenge/run` refuses to execute while `/challenge/dont_run` is running. We have to locate the `dont_run` process and terminate it so we can run `/challenge/run` and get the flag.
+
+## My solution
+**Flag:** `pwn.college{YAxzS_lmRvhACXLQreHarnlCz2h.QXyQDO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now we will search for processes using `ps -ef` for `dont_run`.
+    ```bash
+    hacker@processes~killing-processes:~$ ps -ef | grep dont_run
+    hacker       136     135  0 11:59 ?        00:00:00 /challenge/dont_run
+    hacker       159     145  0 11:59 pts/0    00:00:00 grep --color=auto dont_run
+    ```
+3. Now we get the PID as `136`. Now we can use `kill` command.
+    ```bash
+    hacker@processes~killing-processes:~$ kill 136
+    hacker@processes~killing-processes:~$
+    ```
+4. Now if we check process has stopped.
+    ```bash
+    hacker@processes~killing-processes:~$ ps -ef | grep dont_run
+    hacker       163     145  0 12:00 pts/0    00:00:00 grep --color=auto dont_run
+    ```
+5. Now we can run `/challenge/run`.
+    ```bash
+    hacker@processes~killing-processes:~$ /challenge/run
+    Great job! Here is your payment:
+    pwn.college{YAxzS_lmRvhACXLQreHarnlCz2h.QXyQDO0wCO2kjNzEzW}
+    ```
+6. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/processes/) to complete the challenge.
+
+## What I learned
+1. `kill` command is used to terminate processes.
+2. `sleep` is a program that simply hangs out for the number of seconds specified on the commandline.
+3.  `kill` to terminate it by passing the process identifier (the PID from ps) as an argument.
+
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/processes/) - Processes and Jobs / Killing Processes module pages.
