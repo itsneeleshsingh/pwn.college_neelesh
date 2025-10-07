@@ -43,3 +43,32 @@ Becoming `root` is a fairly common action........
 
 ## References 
 - [pwn.college](https://pwn.college/linux-luminarium/users/) - Untangling Users / Becoming root with su module pages.
+
+
+# Other users with su
+In this challenge we have to switch to the zardus user using `su` where the password is provided, then run `/challenge/run` as that user to get the flag.
+
+## My solution
+**Flag:** `pwn.college{gM2zqWi-8zm7eL_HfOjZVP2CnxM.QX2UDN1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo. Now first we have to change user to `zardus` using `su` command and then passing the user as argument. Then give the password to enter the user.
+    ```bash
+    hacker@users~other-users-with-su:~$ su zardus
+    Password:
+    zardus@users~other-users-with-su:/home/hacker$
+    ```
+3. Now we can execute `/challenge/run` program to get our flag.
+    ```bash
+    zardus@users~other-users-with-su:/home/hacker$ /challenge/run
+    Congratulations, you have become Zardus! Here is your flag:
+    pwn.college{gM2zqWi-8zm7eL_HfOjZVP2CnxM.QX2UDN1wCO2kjNzEzW}
+    ```
+4. I copied this flag and submitted it on [pwn.college](https://pwn.college/linux-luminarium/users/) to complete the challenge.
+
+
+## What I learned
+1. We can give a username as an argument to switch to that user instead of root.
+2. by default `su` will start a root shell.
+## References 
+- [pwn.college](https://pwn.college/linux-luminarium/users/) - Untangling Users / Other users with su module pages.
