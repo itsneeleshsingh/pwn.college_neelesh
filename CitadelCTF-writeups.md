@@ -133,3 +133,262 @@ Learned about ROT ciphers, specifically ROT13 and ROT47, and how reversing the e
 - [ROT13 Tool](https://rot13.com/)
 - [ROT47 Tool](https://www.dcode.fr/rot-47-cipher)
 - Afterwards when retrying the solution i used this [ROT tool](https://www.cachesleuth.com/rot.html) which has all the ROT tools included.
+
+
+
+# Selected Ambient Work
+The challenge provides us with an audio file with a hidden message. The task is to uncover the secret message embedded in the audio, despite background music noises and distortion it. The flag should be formatted with uppercase words separated by underscores.
+
+## My Solve  
+**Flag:** `citadel{1_LOV3_1DM}`
+1. We started by analyzing the provided audio file, recognizing it contained Morse code with distorted background music and the background music was extremely loud and made it hard to distinguish the actual Morse beeps.
+2. To remove these distortion, we went to Analyze → Plot Spectrum to inspect the frequency components of the audio. This allowed us to determine the peak frequency of the Morse beeps, which turned out to be around 1000 Hz.
+3. Once we identified the frequency, we began filtering out the unwanted noise. We applied a High-Pass Filter(val=990 HZ) to remove the low-frequency background elements, followed by a Low-Pass Filter(1010 HZ) to eliminate the higher-frequency background sounds, leaving only the midrange tone of the beeps. After filtering, we performed amplification to make the Morse tones clearer and more prominent compared to the background audio.
+4. After filtering, we amplified the beeps to make them clearer and exported the cleaned audio.
+5. Then we used online Morse code decoder, revealing the message about Aphex Twin and the hidden flag phrase. In between the code shows the `citadel{` and after some seconds `}`.
+    ```
+    RICHARD D JAMES AKA APHEX TWIN IS A BRITISH MUSICIAN, COMPOSER AND DJ ACTIVE IN ELECTRONIC MUSIC SINCE 1988 1 L0V3 1DM AND IS A 
+    PIONEERING FIGURE IN THE INTELLIGENT DANCE MUSIC IDM GENRE.
+    ```
+5. That showed we have to extract only that part of the text as flag.
+
+We first noticed that:
+Most of the text was an informative description about Aphex Twin, a famous electronic musician, but one segment clearly stood out — “1 L0V3 1DM” — which didn’t fit naturally with the rest of the text. This unusual phrase was the actual flag for the challenge.
+
+## What I Learned  
+This challenge taught me how to process audio to isolate specific frequencies and decode hidden Morse code messages.
+
+## References  
+- I downloaded Audacity from [link](https://www.audacityteam.org/).
+- I used this online [Morse decoder tool](https://databorder.com/transfer/morse-sound-receiver/).
+
+
+
+# The Robot's Trail
+The challenge requires patience and careful observation to trace the robot's movements and find the key. The challenge involves exploring the maze, analyzing clues, and using problem-solving skills to reach the final destination.
+
+## My Solve
+**Flag:** `citadel{p4th_tr4v3rs4l_m4st3ry_4ch13v3d}`
+1. I started by clicking the link in the challenge description, which led me to a page with five clickable decoy files. All of them directed me to the same dead end.
+   
+2. After exploring the visible UI without success, we opened the browser's DevTools and inspected the page source.
+
+3. Hidden in the DOM, I found this snippet:
+   ```html
+   <div class="hidden">
+     <p>Start by checking what this site tells search engine bots in <a href="/robots.txt" style="color: #00bcd4;">robots.txt</a></p>
+   </div>
+   ```
+   This pointed me to `https://therobotstrail.citadel.cryptonitemit.in/robots.txt`.
+
+4. The robots.txt file contained a hint.
+   ```
+   Hint for curious explorers:
+   
+   Sometimes system files like /etc/passwd can reveal interesting information
+   ```
+
+5. Following the hint, I tried the file viewer endpoint with `/etc/passwd`:
+   ```bash
+   https://therobotstrail.citadel.cryptonitemit.in/file?path=/etc/passwd
+   ```
+   The page gave another hint, leading me to check `/var/www/html/config.php`.
+
+6. Loading the config file:
+   ```bash
+   https://therobotstrail.citadel.cryptonitemit.in/file?path=/var/www/html/config.php
+   ```
+   Another clue pointed to the webserver logs.
+
+7. I checked the logs at:
+   ```bash
+   https://therobotstrail.citadel.cryptonitemit.in/file?path=/var/log/apache2/access.log
+   ```
+   A subsequent hint mentioned environment variables.
+
+8. I fetched the environment variables at:
+   ```bash
+   https://therobotstrail.citadel.cryptonitemit.in/file?path=/proc/self/environ
+   ```
+   Inside, I discovered an environment entry:
+   ```
+   SECRET_LOCATION=/home/ctf/.secret
+   ```
+
+9. This led me to:
+   ```bash
+   https://therobotstrail.citadel.cryptonitemit.in/file?path=/home/ctf/.secret
+   ```
+   The directory listing showed:
+   ```
+   Directory listing for /home/ctf/.secret:
+   total 12
+   drwx------ 2 ctf ctf 4096 Jan 1 10:00 .
+   drwxr-xr-x 5 ctf ctf 4096 Jan 1 09:55 ..
+   -r-------- 1 ctf ctf 48 Jan 1 10:00 flag.txt
+   ```
+
+10. I opened the final file:
+    ```bash
+    https://therobotstrail.citadel.cryptonitemit.in/file?path=/home/ctf/.secret/flag.txt
+    ```
+    And retrieved the flag.
+
+## What I Learned
+I learned patience and the importance of thoroughly exploring all possible clues.
+
+
+
+
+# Rotting In The Deep
+
+The challenge provides a cryptic message on a chamber floor with a sequence of numbers and a hint about reversing a transformation. The task is to decode the given output by reversing a digit-wise Caesar cipher applied to the flag. Each digit in the flag has been shifted 3 steps forward, and we need to shift them back to retrieve the original message.
+
+## My Solve
+
+**Flag:** `citadel{br0_r34lly_unr0tt3d_m3_b4ck_t0_l1f3}`
+
+1. The provided Python script (`chal.py`) shifts each digit of the flag by 3 positions forward using modulo 10. The output is a long string of digits in `out.txt`.
+
+2. To retrieve the original flag, each digit in the output string needs to be shifted back by 3 positions.
+
+3. The `long_to_bytes` function from the `Crypto.Util.number` module is necessary. So we installed the package using `pip install pycryptodome` so that we can run it locally.
+    ```python
+    from Crypto.Util.number import long_to_bytes
+
+    out = "6895840967002953721051398351211751734500850509315790892845302801984496338433523326225010635779036738800318"
+    KEY = 3
+
+    decoded_digits = ""
+    for d in out:
+        decoded_digits += str((int(d) - KEY) % 10)
+
+    num = int(decoded_digits)
+    flag = long_to_bytes(num)
+    print(flag)
+
+    ```
+4. Thus the output was
+    ```
+    b'citadel{br0_r34lly_unr0tt3d_m3_b4ck_t0_l1f3}'
+    ```
+
+This code processes each digit, shifts it back by 3, reconstructs the number, and converts it back to the original bytes. So we get our flag by directly running it in VS Code.
+
+## What I Learned
+- This challenge taught me about reversing digit-wise ciphers and using the `long_to_bytes` function. 
+- It taught us about ciphers and understanding encoding and decoding processes.
+
+## References
+- Searched for `long_to_bytes` usage.
+- Explored reversing number shifting techniques with ChatGPT guidance and google guidance.
+
+
+
+# Coco Conjecture
+The challenge is about solving a mathematical problem presented by "the dragon CEO". The problem is related to the Collatz Conjecture, where we need to determine the number of steps required to reduce a given number to 1 using the conjecture's rules. The goal is to automate this process and communicate with a remote server to get the flag.
+
+
+## My Solve
+**Flag:** `citadel{k1ryu_c0c0_h4s_4_g0_4t_4n_uns0lv3d_m4th3m4t1cs_pr0bl3m}`
+
+1. So we identified that the problem was based on Collatz Conjecture after some research on Google.
+2. Using the provided `helper.md` and a PDF explaining the conjecture, we created a Python script to communicate with the remote server.
+3. The script uses `pwntools` to establish a connection and receive numbers from the server.
+4. For each number received, the Collatz steps were calculated as it was instructed in the pdf.
+   - If the number is even, it is divided by 2.
+   - If the number is odd, it is multiplied by 3 and incremented by 1.
+5. The count of steps to reach 1 is sent back to the server.(we have to exclude the starting value count)
+6. The script continues this process until the flag is received.(Till all the test cases matches...)
+    ```python
+    from pwn import remote
+    import re
+
+    r = remote("127.0.0.1", 420)
+    while True:
+        line = r.recvline(timeout=10)
+        if not line:
+            break
+        msg = line.decode().strip()
+        print(msg)
+        m = re.search(r"Round \d+: (\d+)", msg)
+        if m:
+            n = int(m.group(1))
+            count = 0
+            while n != 1:
+                if n % 2 == 0:
+                    n //= 2
+                    count += 1
+                else:
+                    n = 3 * n + 1
+                    count += 1
+            r.sendline(str(count))
+            print("-> sent:", count)
+        elif "citadel{" in msg:
+            break
+    r.close()
+    ```
+7. So in output there were many test cases and numbers that were checked after all it gave us with the flag.
+
+## What I Learned
+
+- The Collatz Conjecture is a fundamental problem in mathematics where we need to reduce any positive integer to 1 using specific rules.
+- Automating tasks involving network communication or to connect and communicate to a server can be done using tools like `pwntools`.(or socket which we have not used)
+- We learned how to write a code by going throught the syntax.
+
+## References
+- Google for identifying the problem as the Collatz Conjecture.
+- ChatGPT and google for syntax help with the Python script.
+- `Helper.md` file for instructions on connecting to the remote server.
+- PDF file explaining the logic behind the Collatz Conjecture.
+
+
+
+# Schlagenheim
+The challenge gives us a corrupted WAV file containing a hidden passcode needed to unlock the next challenge. The file, though named `.wav`, is scrambled. The task is to repair this file to extract the passcode.
+
+## My Solve
+
+**Flag:** `citadel{8lackM1D1wa5c00l}`
+
+1. I opened the WAV file on Windows, which didn't work.
+2. So I searched on google and found the `xxd` command to view the hex dump. So i wrote in shell `xxd -l 16 mysong.wav` to view the hex dump, revealing bytes starting with `4d31 4431`.
+3. So i was just looking and found there that M1D1 was written in hex. After searching, I found that the file might be a MIDI since MIDI headers start with `4D 54 68 64`. I then changed them using an online hex editor to resemble a MIDI header.
+    ```
+    4D 31 44 31  -> M1D1
+    4D 54 68 64  -> MThd
+    ```
+4. Then I imported the edited `.mid` file into Audacity, where the flag appeared in the audio data.
+
+## What I Learned
+- File headers like WAV and MIDI can be identified using hex dumps. A correct header is crucial for proper file recognition.
+- Tools like `xxd` and hex editors are essential for diagnosing and correcting file issues.
+- MIDI files store musical notes, which can hide text messages.
+
+## References
+- Google for MIDI structure and xxd usage.
+- [hexed.it](https://hexed.it/) for hex editing.
+- Audacity for MIDI playback and analysis.
+
+
+
+# The Sound of Music
+The challenge required participants to track the digital footprints of a user named `citadweller` across various music platforms. The goal was to find three segments of a flag hidden on these platforms, which when combined would reveal the complete flag. This challenge tested OSINT focusing on the ability to gather information from public profiles and links shared by the user.
+
+## My Solve
+**Flag:** `citadel{c0mputers_st0pped_exchang1ng_1nf0rmat10n_n_started_shar1ng_st0r1es_n_then_they_were_n0where_t0_be_f0und}`
+
+1. I began by searching for `citadweller` on music platforms where users typically post album ratings and listening history. 
+2. I found a RateYourMusic profile at [https://rateyourmusic.com/~citadweller](https://rateyourmusic.com/~citadweller), where the second part of the flag was hidden: `_n_started_shar1ng_st0r1es`.
+3. On the same profile, there was a link to a Spotify account. Upon exploring the public playlist, I found the third part of the flag in the playlist description: `_n_then_they_were_n0where_t0_be_f0und`.
+4. I continued the search and discovered a Last.fm profile at [https://www.last.fm/user/citadweller](https://www.last.fm/user/citadweller). In the shoutbox section, the first part of the flag was located: `citadel{c0mputers_st0pped_exchang1ng_1nf0rmat10n}`.
+5. By combining all three parts, I reconstructed the complete flag.
+
+## What I Learned
+- This challenge taught me the importance of thoroughly investigating multiple platforms when conducting OSINT.
+- I also learned that persistence is key in tracking digital footprints as clues can be hidden in any unrelated places.
+
+## References
+- [RateYourMusic](https://rateyourmusic.com)
+- [Spotify](https://www.spotify.com)
+- [Last.fm](https://www.last.fm)
