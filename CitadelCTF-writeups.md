@@ -1,3 +1,5 @@
+# Challenges I solved and contributed
+
 # Zahard's Welcome
 The challenge begins with a mysterious description of the Citadel, hinting at a path that starts in a gathering place. The clue provided is a Discord invitation link. The goal is to locate the flag by exploring the server's channels.
 
@@ -423,8 +425,6 @@ The challenge required participants to track the digital footprints of a user na
 
 
 
-
-
 # AetherCorp NetprobeX
 This challenge required us to uncover a hidden backdoor in the NetProbeX system, a remnant of the former AetherCorp. The task involved analyzing logs and exploiting vulnerabilities to retrieve a passcode. The engineers left subtle hints in the logs, which we had to decipher to progress. Our goal was to find and exploit this backdoor to get the flag.
 
@@ -515,15 +515,136 @@ This challenge required us to uncover a hidden backdoor in the NetProbeX system,
    ```
 
 ## What I learned
-
 This challenge taught me about:
-
 - Command Injection using `%0A` to chain commands in restricted environments.
 - Alternative File Viewing using tools like `more` or `less` when `cat` is unavailable or not allowed.
 - Navigating through system directories to uncover hidden files and folders.
 - Understanding how to interpret subtle hints left behind in logs.
 
 ## References
-
 - Google for command injection techniques and alternative file viewing methods.
 - ChatGPT for syntax and command structures.
+
+
+
+
+# Challenges My Teammates solved
+
+
+# Echoes and Pings
+This challenge provided us with a pcap file containing network traffic history. The task was to analyze the file and extract an image hidden within the network data. The goal was to identify the correct packets and tools needed to reconstruct the image from the captured data. It required understanding of network protocols and using appropriate tools to extract and decode the image data from the pcap file.
+
+## My solve
+**Flag:** `citadel{1_r34lly_w4nt_t0_st4y_4t_y0ur_h0us3}`
+
+1. We started by researching pcap files and learned that they are used to capture network traffic. We found that tools like Wireshark(this was coming first in what we searched on google) can be used to analyze them.
+2. We installed Wireshark and opened the provided pcap file to examine the network protocols. We noticed several TCP packets and two ICMP packets.
+3. After some research, We decided to focus on extracting data from the ICMP packets, as they often carry additional data that could contain the image.
+4. We used tshark to filter and extract the ICMP payload data:
+   ```bash
+   sudo apt install tshark binwalk xxd
+   tshark -r challenge.pcap -Y icmp -T fields -e data > icmp_payloads.hex
+   ```
+5. We then cleaned up the extracted data and combined it into a single binary file:
+   ```bash
+   tr -d ''
+   icmp_payloads.hex | sed 's/ //g' > combined.hex
+   xxd -r -p combined.hex > combined.bin
+   ```
+6. Finally, We used binwalk to extract the image from the binary data:
+   ```bash
+   binwalk -e combined.bin
+   ```
+7. Upon extracting, We found an image file containing the flag.
+
+## What I learned
+I learned how to analyze pcap files using tools like Wireshark and tshark. I also gained experience with extracting hidden data from network packets and using binwalk for file extraction. This challenge helped me understand the importance of understanding network protocols and the ability to extract data from them.
+
+## References
+- [Wireshark Official Website](https://www.wireshark.org/)
+- [tshark Documentation](https://www.wireshark.org/docs/ws.html)
+- [Binwalk GitHub Repository](https://github.com/ReFirmLabs/binwalk)
+
+
+
+
+# The Ripper
+This challenge provided us with a hashed text and a wordlist, where one of the words was the correct flag. The task was to decode the hash and match it with the wordlist to find the correct flag. The challenge tested our understanding of hash decryption and password cracking tools.
+
+## My Solve
+
+**Flag:** `citadel{fake_flag_4_fake_pl4y3rs}`
+
+1. The challenge started with a mysterious hashed text and a list of possible words. We knew that one of these words was the flag, but it was encrypted, so we needed to decode it.
+
+2. We began researching what a hash is and how it works. we found that the given hash is using bcrypt encryption as AI suggested it and we also checked with a online hash format tool but didn't get much progress or information from it. Later we found that we were correct but in hurry forgot to check it properly.
+
+3. We moved on to looking at the wordlist which was probably a list of all the various random flags one of which would have been the actual flag which was hashed in the other file. So, on googling further we found about the John-The Ripper, a tool for cracking password hashes. It can use a wordlist to match against hashes, which seemed perfect for this challenge.
+
+4. We set out to install John the Ripper on our Linux system(Ubuntu WSL). We followed online guides and eventually managed to compile and install it from source.
+
+5. We created a directory named `crackdir` and placed both the hashed text `hashes.txt` and the wordlist `wordlist.txt` inside it.
+
+6. We navigated to the directory and ran the following commands:
+   ```bash
+   cd ~/crackdir
+   /tmp/john-jumbo/run/john --format=bcrypt --wordlist=wordlist.txt hashes.txt
+   john --show ~/crackdir/hashes.txt
+   ```
+   The tool worked and revealed the password `fake_flag_4_fake_pl4y3rs`.
+
+7. We realized the flag had to be in the format `citadel{...}`, so I combined the password with the required prefix and suffix to get the final flag.
+
+## What I Learned
+- I gained experience with John the Ripper, learning how to install it and use it with custom wordlists and hash formats.
+- I understood the importance of identifying hash types and using appropriate tools to identify and crack them.
+- The challenge improved my CLI skills, especially in setting up environments for specific tools.
+
+## References
+- **John the Ripper Wiki:** I used their official documentation to download it on my WSL.
+
+
+
+
+
+# Feels Like We Only Go Backwards
+To solve this challenge, we need to work through a series of steps that involve reverse engineering a binary file and analyzing the code to find hidden values and decode them. The challenge involves three levels, each requiring a different approach to unlock the next step. The overall goal is to find the hidden number in each level, use it to progress, and finally piece together the flag by reversing an encryption method applied to the final level.
+
+## My Solve
+
+**Flag:** `citadel{f0r_0n3_m0r3_h0ur_1_c4n_r4g3}`
+
+1. We started with a file named "tameimpala" and needed to figure out what type of file it was and how to open it. After some research, we learned it was a binary file that could be analyzed using a reverse engineering tool like Ghidra.
+
+2. We opened the file in Ghidra and navigated to the "Defined Strings" window to search for familiar strings that might indicate the first level's solution. We found this line of code:
+   ```c
+   if (0xf < sVar2) {
+      puts("okay okay maybe the sun's coming up.");
+      FUN_00101340();
+      return 1;
+   ```
+   Using AI, we determined that the input must be greater than 15 to proceed. From this, we concluded that the answer for level 1 was "Music to walk home by."
+
+3. Moving on to level 2, we found the code comparing the input value to the hexadecimal value `0x1e6d9e9c7`. Converting this to decimal gave us `8167702983`, which was the answer for level 2.
+
+4. For level 3, we navigated to the address `00101020` in Ghidra and found this code:
+   ```c
+   if (sVar1 == 0x25) {
+       lVar2 = 0;
+       while (local_58[lVar2] ==
+              (ushort)((ushort)local_88[lVar2] + ((ushort)lVar2 & 0xff) * 5 +
+                       (ushort)(byte)param_1[lVar2] * 2)) {
+           lVar2 = lVar2 + 1;
+           if (lVar2 == 0x25) {
+               return 1;
+           }
+       }
+   }
+   ```
+   Using AI, we figured out the mathematical formula used to encrypt the flag and created a formula to reverse it, leading us to the final flag.
+
+## What I learned
+I learned how to use Ghidra for reverse engineering binaries, how to identify and analyze code snippets, and how to apply mathematical reasoning to reverse-engineer encryption methods. Additionally, I understood the importance of using AI to automate certain tasks and decode complex mathematical operations.
+
+## References
+- Official Ghidra documentation: https://ghidra-sre.org/
