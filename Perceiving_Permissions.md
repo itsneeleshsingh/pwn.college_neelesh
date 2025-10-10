@@ -348,3 +348,54 @@ The goal is to learn how to use the `=` operator to set exact permissions, how t
 
 ## References
 - [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions / Permissions Setting Practice module page.
+
+
+
+
+# The SUID Bit
+The challenge requires setting the SUID bit on a program to execute it with root privileges. This allows a user to run the program as the file's owner, which in this case is root. The goal is to modify the permissions of the `/challenge/getroot` file so that it runs with elevated privileges, enabling access to the restricted flag file.
+
+## My solution
+**Flag:** `pwn.college{E6Ad3PAxN4FAd9RhOgYgwjh3da_.QXzEjN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo.
+
+3. First, I checked the current permissions of the `/challenge/getroot` file:
+   ```bash
+   hacker@permissions~the-suid-bit:~$ ls /challenge/getroot -l
+   -rwxr-xr-x 1 root root 155 Jan 14  2025 /challenge/getroot
+   ```
+   The output shows that the SUID bit is not set since the permissions are `-rwxr-xr-x`.
+
+4. I set the SUID bit using the `chmod` command:
+   ```bash
+   hacker@permissions~the-suid-bit:~$ chmod u+s /challenge/getroot
+   ```
+
+5. After setting the SUID bit, I verified the permissions again:
+   ```bash
+   hacker@permissions~the-suid-bit:~$ ls /challenge/getroot -l
+   -rwsr-xr-x 1 root root 155 Jan 14  2025 /challenge/getroot
+   ```
+   Now, the permissions are `-rwsr-xr-x`, indicating that the SUID bit is set.
+
+6. I executed the program to get a root shell:
+   ```bash
+   hacker@permissions~the-suid-bit:~$ /challenge/getroot
+   SUCCESS! You have set the suid bit on this program, and it is running as root!
+   Here is your shell...
+   root@permissions~the-suid-bit:~#
+   ```
+
+7. Finally, I read the flag:
+   ```bash
+   root@permissions~the-suid-bit:~# cat /flag
+   pwn.college{E6Ad3PAxN4FAd9RhOgYgwjh3da_.QXzEjN0wCO2kjNzEzW}
+   ```
+
+## What I learned
+This challenge taught me how to set the SUID bit to allow a program to run with root privileges. I learned that the SUID bit is crucial for allowing non-root users to execute certain programs with elevated permissions. I also understand the importance of carefully assigning SUID permissions to avoid security risks.
+
+## References
+- [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions / The SUID Bit module page.
