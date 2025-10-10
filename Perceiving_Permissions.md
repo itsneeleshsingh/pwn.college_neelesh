@@ -133,3 +133,218 @@ This challenge requires understanding how group ownership works in Linux and how
 
 ## References
 - [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions / Fun With Groups Names module pages.
+
+
+
+
+
+# Changing Permissions
+The challenge is about understanding and modifying file permissions in Linux. We need to change the permissions of the `/flag` file to allow reading it. The file is owned by root with read-only access, so we must use `chmod` to modify its permissions and make it readable for others.
+
+## My solution
+**Flag:** `pwn.college{0XSkcqbAl72k1eFT6Zb7v1enE-n.QXzcjM1wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo.
+3. I checked the current permissions of the `/flag` file:
+   ```bash
+   hacker@permissions~changing-permissions:~$ ls -l /flag
+   -r-------- 1 root root 60 Oct 10 01:43 /flag
+   ```
+4. I observed that only root can read the file, so I need to change the permissions.
+5. I used chmod to add read access for others so that they can also read the file:
+   ```bash
+   hacker@permissions~changing-permissions:~$ chmod o+r /flag
+   ```
+6. I checked the updated permissions to confirm:
+   ```bash
+   hacker@permissions~changing-permissions:~$ ls -l /flag
+   -r-----r-- 1 root root 60 Oct 10 01:43 /flag
+   ```
+7. With read access granted, I read the flag using cat:
+   ```bash
+   hacker@permissions~changing-permissions:~$ cat /flag
+   pwn.college{0XSkcqbAl72k1eFT6Zb7v1enE-n.QXzcjM1wCO2kjNzEzW}
+   ```
+
+## What I learned
+In this challenge, I learned how to modify file permissions using the chmod command, using the symbolic mode to add read access for others. I understood how permissions are structured for user, group, and others.
+
+## References
+- [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions / Changing Permissions module pages.
+
+
+
+
+
+# Executable Files
+This challenge focuses on understanding execute permissions in Linux. The goal is to make the `/challenge/run` program executable so that it can be run to retrieve the flag. The program initially lacks execute permissions for the user, requiring the use of chmod to set the appropriate permissions.
+
+## My solution
+**Flag:** `pwn.college{oKTus0SwdhhU8b8OxOoRGzl8GUR.QXyEjN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo.
+3. I first checked the permissions of `/challenge/run` using the `ls` command with `-l` option:
+   ```bash
+   hacker@permissions~executable-files:~$ ls /challenge/run -l
+   -r--r--r-- 1 hacker hacker 32 Jan 14  2025 /challenge/run
+   ```
+   The output showed that the file had r--r--r-- permissions, meaning no execute permissions for anyone.
+4. I tried to execute the program to see if it would run:
+   ```bash
+   hacker@permissions~executable-files:~$ /challenge/run
+   bash: /challenge/run: Permission denied
+   ```
+   It resulted in a permission denied error, confirming the lack of execute permissions.
+5. To resolve this, I used chmod to add execute permissions for the user `u+x`:
+   ```bash
+   hacker@permissions~executable-files:~$ chmod u+x /challenge/run
+   hacker@permissions~executable-files:~$
+   ```
+6. After changing the permissions, I checked again with  `ls -l` to verify:
+   ```bash
+   hacker@permissions~executable-files:~$ ls /challenge/run -l
+   -r-xr--r-- 1 hacker hacker 32 Jan 14  2025 /challenge/run
+   ```
+   The permissions were now r-xr--r--, indicating execute access for the user.
+7. Finally, I executed the program, which ran successfully and displayed the flag:
+   ```bash
+   hacker@permissions~executable-files:~$ /challenge/run
+   Successful execution! Here is your flag:
+   pwn.college{oKTus0SwdhhU8b8OxOoRGzl8GUR.QXyEjN0wCO2kjNzEzW}
+   ```
+
+## What I learned
+- Understanding the importance of execute permissions in Linux file systems.
+- Familiarity with using `chmod` to modify permissions, specifically adding execute access.
+- Recognizing how file ownership and permissions affect program execution.
+
+## References
+- [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions /Executable Files module pages.
+
+
+
+
+# Permission Tweaking Practice
+This challenge is all about understanding and correctly modifying file permissions. The task requires us to change the permissions of a specific file multiple times, each time to match the given criteria. After successfully setting the permissions correctly eight times in a row, we will be allowed to modify the permissions of the flag file and thus we can read the flag.
+
+## My solution
+**Flag:** `pwn.college{EfN6YmimKc9T71UnuAjU_vO9pN5.QXwEjN0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo.
+3. I started the challenge by running the command `/challenge/run` to begin the first round.
+   ```bash
+   hacker@permissions~permission-tweaking-practice:~$ /challenge/run
+   Round 1 of 8!
+
+   Current permissions of "/challenge/pwn": rw-r--r--
+   * the user does have read permissions
+   * the user does have write permissions
+   - the user doesn't have execute permissions
+   * the group does have read permissions
+   - the group doesn't have write permissions
+   - the group doesn't have execute permissions
+   * the world does have read permissions
+   - the world doesn't have write permissions
+   - the world doesn't have execute permissions
+
+   Needed permissions of "/challenge/pwn": rw-r--rw-
+   * the user does have read permissions
+   * the user does have write permissions
+   - the user doesn't have execute permissions
+   * the group does have read permissions
+   - the group doesn't have write permissions
+   - the group doesn't have execute permissions
+   * the world does have read permissions
+   * the world does have write permissions
+   - the world doesn't have execute permissions
+   ```
+
+4. To set the correct permissions, I added write permissions for others using the command `chmod o+w /challenge/pwn`.
+   ```bash
+   hacker@permissions~permission-tweaking-practice:~$ chmod o+w /challenge/pwn
+   ```
+
+5. Proceeding to the next rounds, I continued adjusting the permissions as required:
+
+- Added write permissions for others: `chmod o+w /challenge/pwn`
+- Removed write permissions for others: `chmod o-w /challenge/pwn`
+- Set read, write, and execute for all: `chmod ugo+rwx /challenge/pwn`
+- Removed write and execute for group: `chmod g-wx /challenge/pwn`
+- Added write and execute for group: `chmod g+wx /challenge/pwn`
+- Removed read and execute for user and group: `chmod ug-rx /challenge/pwn`
+- Removed read and execute for others: `chmod o-rx /challenge/pwn`
+
+6. After successfully completing eight rounds, I was allowed to modify the permissions of the flag file.
+
+   ```bash
+   hacker@permissions~permission-tweaking-practice:~$ chmod ugo+x /challenge/pwn
+   You set the correct permissions!
+   You've solved all 8 rounds! I have changed the ownership
+   of the /flag file so that you can 'chmod' it. You won't be able to read
+   it until you make it readable with chmod!
+   ```
+
+7. The flag file had no permissions initially, so I added read permissions for the user. Then i printed the flag file.
+
+   ```bash
+   hacker@permissions~permission-tweaking-practice:~$ chmod u+r /flag
+   hacker@permissions~permission-tweaking-practice:~$ cat /flag
+   pwn.college{EfN6YmimKc9T71UnuAjU_vO9pN5.QXwEjN0wCO2kjNzEzW}
+   ```
+
+## What I learned
+- Use the `chmod` command to set specific permissions for the user, group, and others.
+- Understand the octal notation and how each digit corresponds to permissions read, write, execute.
+
+## References
+- [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions / Permission Tweaking Practice module.
+
+
+
+
+# Permissions Setting Practice
+The goal is to learn how to use the `=` operator to set exact permissions, how to chain multiple permissions using commas, and how to remove permissions using the `-` operator. The challenge requires us to apply these concepts to achieve the desired permissions for a file through multiple rounds.
+
+## My solution
+**Flag:** `pwn.college{QkWgJkaIKQULWZ0yYE12bSvFNDi.QXzETO0wCO2kjNzEzW}`
+
+1. I connected the dojo host using SSH command.
+2. Now the shell is connected to dojo.
+
+3. The first step was to understand the current permissions and the target permissions for each round. For example, in the first round, the current permissions were `-----xrwx`, and the target was `--xr-x-wx`. I needed to use `chmod` to set the correct permissions. I used the command:
+   ```bash
+   hacker@permissions~permissions-setting-practice:~$ chmod u=-,g=x,o+wx /challenge/pwn
+   ```
+   - This command sets the user permissions to none (u=-), group permissions to execute (g=x), and adds read, write, and execute for others (o+wx).
+
+4. In the next rounds, I had to use different combinations of chmod commands. For example, in one round, I had to set user execute, group read, and world read and write permissions. I used:
+   ```bash
+   hacker@permissions~permissions-setting-practice:~$ chmod u=x,g+r,o=rw /challenge/pwn
+   ```
+
+5. Another round required setting group write and execute permissions but removing group read permissions. I used:
+   ```bash
+   hacker@permissions~permissions-setting-practice:~$ chmod g=-,o=wx /challenge/pwn
+   ```
+
+6. In the final round, after completing all 8 rounds, I was given a file /flag with no permissions. I needed to add read permissions for the user to view the flag:
+   ```bash
+   hacker@permissions~permissions-setting-practice:~$ chmod u+r /flag
+   ```
+   - After setting the permissions, I was able to read the flag:
+   ```bash
+   hacker@permissions~permissions-setting-practice:~$ cat /flag
+   pwn.college{QkWgJkaIKQULWZ0yYE12bSvFNDi.QXzETO0wCO2kjNzEzW}
+   ```
+
+## What I learned
+- Using `=` to set exact permissions.
+- Chaining multiple permissions using commas.
+- Using `-` to remove permissions.
+- Understanding the difference between using - after =
+
+## References
+- [pwn.college](https://pwn.college/linux-luminarium/permissions/) - Perceiving Permissions / Permissions Setting Practice module page.
